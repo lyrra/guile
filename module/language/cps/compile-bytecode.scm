@@ -681,3 +681,4 @@
     (values (link-assembly asm #:page-aligned? (kw-arg-ref opts #:to-file? #f))
             env
             env)))
+

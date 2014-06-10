@@ -46,8 +46,8 @@
   #:title	"Bytecode"
   #:compilers   `((value . ,bytecode->value))
   #:printer	(lambda (bytecode port)
-                  (if (bytevector? bytecode)
-                      (put-bytevector port bytecode)
-                      (bytecode port)))
+                  (if (bytevector? (car bytecode))
+                      (put-bytevector port (car bytecode))
+                      ((car bytecode) port)))
   #:reader      get-bytevector-all
   #:for-humans? #f)
