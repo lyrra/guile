@@ -2009,7 +2009,7 @@ should be .data or .rodata), and return the resulting linker object.
                 (write-constant-reference buf pos elt)
                 (lp (1+ i)))))))
 
-       ((symbol? obj)
+       ((and (symbol? obj) (symbol-interned? obj))
         (write-placeholder asm buf pos))
 
        ((keyword? obj)
