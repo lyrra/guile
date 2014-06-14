@@ -379,8 +379,8 @@ minimum, and maximum."
    ((syntax? val) (return &syntax 0))
    ((not (variable-bound? (make-variable val)))
     (return &special-immediate &undefined))
-
-   (else (error "unhandled constant" val))))
+   (else (return &all-types #f)) ; 20190617 guile: (else (error "unhandled constant" val))
+   ))
 
 (define *type-checkers* (make-hash-table))
 (define *type-inferrers* (make-hash-table))
