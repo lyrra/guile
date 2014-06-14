@@ -381,8 +381,8 @@ minimum, and maximum."
    ((syntax? val) (return &syntax 0))
    ((not (variable-bound? (make-variable val)))
     (return &special-immediate &undefined))
-
-   (else (error "unhandled constant" val))))
+   (else (return &all-types #f)) ; 20190617 guile: (else (error "unhandled constant" val))
+   ))
 
 (define (constant-type-entry val)
   "Compute the type and range of VAL.  Return three values: the type,
