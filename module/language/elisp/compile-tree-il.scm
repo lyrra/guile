@@ -786,9 +786,11 @@
                                           args
                                           body))))
                   (make-const loc name))))
-           (with-native-target
-            (lambda ()
-              (compile tree-il #:from 'tree-il #:to 'value)))
+           ; only evaluate top-level macro definitions
+           (when (fluid-ref toplevel?)
+             (with-native-target
+               (lambda ()
+                 (compile tree-il #:from 'tree-il #:to 'value))))
            tree-il)))
     (else (report-error loc "bad defmacro" args)))) ; 201906717 larry good patch, send upstream?
 
