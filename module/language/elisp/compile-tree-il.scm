@@ -31,6 +31,7 @@
   #:use-module (srfi srfi-11)
   #:use-module (srfi srfi-26)
   #:use-module (ice-9 format)
+  #:use-module (language tree-il eval)
   #:export (compile-tree-il
             compile-progn
             compile-eval-when-compile
@@ -463,9 +464,13 @@
                  (map compile-expr-1 args))))
 
 (defspecial eval-when-compile (loc args)
+  ; use guile eval for elisp tree-il
+  (make-const loc (eval-elisp `(progn ,@args))))
+
+  ; 20190617 larry, Non-elisp-eval version:
   (make-const loc (with-native-target
                    (lambda ()
-                     (compile `(progn ,@args) #:from 'elisp #:to 'value)))))
+                     (compile `(progn ,@args) #:from 'elisp #:to 'value))))
 
 (define toplevel? (make-fluid))
 
@@ -792,7 +797,7 @@
            (when (fluid-ref toplevel?)
              (with-native-target
                (lambda ()
-                 (compile tree-il #:from 'tree-il #:to 'value))))
+                 (eval-tree-il tree-il))))
            tree-il)))
     (else (report-error loc "bad defmacro" args)))) ; 201906717 larry good patch, send upstream?
 
