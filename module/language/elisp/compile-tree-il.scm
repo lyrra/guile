@@ -31,7 +31,6 @@
   #:use-module (srfi srfi-11)
   #:use-module (srfi srfi-26)
   #:use-module (ice-9 format)
-  #:use-module (language tree-il eval)
   #:export (compile-tree-il
             compile-progn
             compile-eval-when-compile
@@ -797,7 +796,7 @@
            (when (fluid-ref toplevel?)
              (with-native-target
                (lambda ()
-                 (eval-tree-il tree-il))))
+                 (eval tree-il (current-module)))))
            tree-il)))
     (else (report-error loc "bad defmacro" args)))) ; 201906717 larry good patch, send upstream?
 
