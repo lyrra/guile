@@ -112,7 +112,7 @@
 (define-unary-type-predicate-folder fixnum? &fixnum)
 (define-unary-type-predicate-folder bignum? &bignum)
 (define-unary-type-predicate-folder pair? &pair)
-(define-unary-type-predicate-folder null? &null) ; 20190617 larry, fix `nil?' type inference
+;(define-unary-type-predicate-folder null? &null) ; 20190617 larry, fix `nil?' type inference
 (define-unary-type-predicate-folder symbol? &symbol)
 (define-unary-type-predicate-folder variable? &box)
 (define-unary-type-predicate-folder mutable-vector? &mutable-vector)

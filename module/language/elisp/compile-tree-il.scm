@@ -467,9 +467,9 @@
   (make-const loc (eval-elisp `(progn ,@args))))
 
   ; 20190617 larry, Non-elisp-eval version:
-  (make-const loc (with-native-target
-                   (lambda ()
-                     (compile `(progn ,@args) #:from 'elisp #:to 'value))))
+  ;(make-const loc (with-native-target
+  ;                 (lambda ()
+  ;                   (compile `(progn ,@args) #:from 'elisp #:to 'value))))
 
 (define toplevel? (make-fluid))
 
