@@ -23,6 +23,7 @@
 # include <config.h>
 #endif
 
+#include <stdio.h>
 #include <stdarg.h>
 
 #include "boolean.h"
@@ -568,8 +569,10 @@ SCM_DEFINE (scm_module_transformer, "module-transformer", 1, 0, 0,
       SCM v = scm_hashq_ref (scm_pre_modules_obarray,
                              sym_macroexpand,
                              SCM_BOOL_F);
-      if (scm_is_false (v))
+      if (scm_is_false (v)) {
+        fprintf(stderr, "no-module\n");
         SCM_MISC_ERROR ("no module, and `macroexpand' unbound", SCM_EOL);
+      }
       return SCM_VARIABLE_REF (v);
     }
   else
