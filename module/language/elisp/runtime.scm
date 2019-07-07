@@ -96,7 +96,8 @@
 (define (set-lexical-binding-mode x)
   (set! lexical-binding x))
 
-(define unbound (make-symbol "unbound"))
+;(define unbound (make-symbol "unbound"))
+(define unbound (string->symbol "unbound"))
 
 (define dynamic? vector?)
 (define (make-dynamic)
