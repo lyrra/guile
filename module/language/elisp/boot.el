@@ -22,24 +22,77 @@
 (defmacro @ (module symbol)
   `(guile-ref ,module ,symbol))
 
+(defmacro @@ (module symbol)
+  `(guile-private-ref ,module ,symbol))
+
+(defmacro defun (name args &rest body)
+  `(let ((proc (function (lambda ,args ,@body))))
+     (%funcall (@ (language elisp runtime) set-symbol-function!)
+               ',name
+               proc)
+     (%funcall (@ (guile) set-procedure-property!)
+               proc 'name ',name)
+     ',name))
+
+(defun omega () (omega))
+
 (defmacro eval-and-compile (&rest body)
   `(progn
      (eval-when-compile ,@body)
      (progn ,@body)))
 
+(defmacro %define-compiler-macro (name args &rest body)
+  `(eval-and-compile
+     (%funcall
+      (@ (language elisp runtime) set-symbol-plist!)
+      ',name
+      (%funcall
+       (@ (guile) cons*)
+       '%compiler-macro
+       #'(lambda ,args ,@body)
+       (%funcall (@ (language elisp runtime) symbol-plist) ',name)))
+     ',name))
+
+(defmacro defsubst (name args &rest body)
+  `(progn
+     (defun ,name ,args ,@body)
+     (eval-and-compile
+       (%define-compiler-macro ,name (form)
+         (%funcall (@ (guile) cons*)
+                   '%funcall
+                   (%funcall
+                    (@ (guile) list)
+                    'function
+                    (%funcall (@ (guile) cons*) 'lambda ',args ',body))
+                   (%funcall (@ (guile) cdr) form))))))
+
 (eval-and-compile
-  (defun null (object)
+  (defun eval (form)
+    (%funcall (@ (language elisp runtime) eval-elisp) form)))
+
+(eval-and-compile
+  (defsubst null (object)
+    (declare (lexical object))
     (if object nil t))
-  (defun consp (object)
-    (%funcall (@ (guile) pair?) object))
+  (defsubst consp (x)
+    (declare (lexical x))
+    (%funcall (@ (guile) pair?) x))
+  (defsubst atom (x)
+    (declare (lexical x))
+    (null (consp x)))
   (defun listp (object)
+    (declare (lexical object))
     (if object (consp object) t))
-  (defun car (list)
+  (defsubst car (list)
+    (declare (lexical list))
     (if list (%funcall (@ (guile) car) list) nil))
-  (defun cdr (list)
+  (defsubst cdr (list)
+    (declare (lexical list))
     (if list (%funcall (@ (guile) cdr) list) nil))
   (defun make-symbol (name)
     (%funcall (@ (guile) make-symbol) name))
+  (defun gensym ()
+    (%funcall (@ (guile) gensym)))
   (defun signal (error-symbol data)
     (%funcall (@ (guile) throw) 'elisp-condition error-symbol data)))
 
@@ -47,11 +100,14 @@
   `#'(lambda ,@cdr))
 
 (defmacro prog1 (first &rest body)
-  (let ((temp (make-symbol "prog1-temp")))
+  (let ((temp (gensym)))
     `(let ((,temp ,first))
        (declare (lexical ,temp))
        ,@body
        ,temp)))
+
+(defun interactive (&optional arg)
+  nil)
 
 (defmacro prog2 (form1 form2 &rest body)
   `(progn ,form1 (prog1 ,form2 ,@body)))
@@ -65,7 +121,7 @@
          (let ((condition (car first))
                (body (cdr first)))
            (if (null body)
-               (let ((temp (make-symbol "cond-temp")))
+               (let ((temp (gensym)))
                  `(let ((,temp ,condition))
                     (declare (lexical ,temp))
                     (if ,temp
@@ -86,7 +142,7 @@
 (defmacro or (&rest conditions)
   (cond ((null conditions) nil)
         ((null (cdr conditions)) (car conditions))
-        (t (let ((temp (make-symbol "or-temp")))
+        (t (let ((temp (gensym)))
              `(let ((,temp ,(car conditions)))
                 (declare (lexical ,temp))
                 (if ,temp
@@ -118,7 +174,7 @@
     (loop bindings '())))
 
 (defmacro while (test &rest body)
-  (let ((loop (make-symbol "loop")))
+  (let ((loop (gensym)))
     `(labels ((,loop ()
                  (if ,test
                      (progn ,@body (,loop))
@@ -126,10 +182,10 @@
        (,loop))))
 
 (defmacro unwind-protect (bodyform &rest unwindforms)
-  `(funcall (@ (guile) dynamic-wind)
-            #'(lambda () nil)
-            #'(lambda () ,bodyform)
-            #'(lambda () ,@unwindforms)))
+  `(%funcall (@ (guile) dynamic-wind)
+             #'(lambda () nil)
+             #'(lambda () ,bodyform)
+             #'(lambda () ,@unwindforms)))
 
 (defmacro when (cond &rest body)
   `(if ,cond
@@ -142,7 +198,7 @@
 (defun symbolp (object)
   (%funcall (@ (guile) symbol?) object))
 
-(defun functionp (object)
+(defun %functionp (object)
   (%funcall (@ (guile) procedure?) object))
 
 (defun symbol-function (symbol)
@@ -153,19 +209,17 @@
       f)))
 
 (defun eval (form)
-  (%funcall (@ (system base compile) compile)
-            form
-            (%funcall (@ (guile) symbol->keyword) 'from)
-            'elisp
-            (%funcall (@ (guile) symbol->keyword) 'to)
-            'value))
+  (%funcall (@ (language elisp runtime) eval-elisp) form))
 
 (defun %indirect-function (object)
   (cond
-   ((functionp object)
+   ((%functionp object)
     object)
+   ((null object)
+    (signal 'void-function nil))
    ((symbolp object)                    ;++ cycle detection
-    (%indirect-function (symbol-function object)))
+    (%indirect-function
+     (%funcall (@ (language elisp runtime) symbol-function) object)))
    ((listp object)
     (eval `(function ,object)))
    (t
@@ -182,17 +236,79 @@
             (%indirect-function function)
             arguments))
 
+(defun autoload-do-load (fundef &optional funname macro-only)
+  (and (load (cadr fundef))
+       (%indirect-function funname)))
+
 (defun fset (symbol definition)
   (funcall (@ (language elisp runtime) set-symbol-function!)
            symbol
-           (if (functionp definition)
-               definition
+           definition))
+
+(defun eq (obj1 obj2)
+  (if obj1
+      (%funcall (@ (guile) eq?) obj1 obj2)
+    (if obj2 nil t)))
+
+(defun nthcdr (n list)
+  (let ((i 0))
+    (while (< i n)
+      (setq list (cdr list)
+            i (+ i 1)))
+    list))
+
+(defun nth (n list)
+  (car (nthcdr n list)))
+
+(defun fset (symbol definition)
+  (funcall (@ (language elisp runtime) set-symbol-function!)
+           symbol
+           (cond
+            ((%funcall (@ (guile) procedure?) definition)
+             definition)
+            ((and (consp definition)
+                  (eq (car definition) 'macro))
+             (if (%funcall (@ (guile) procedure?) (cdr definition))
+                 definition
+               (cons 'macro
+                     (funcall (@ (language elisp falias) make-falias)
+                              (function
+                               (lambda (&rest args) (apply (cdr definition) args)))
+                              (cdr definition)))))
+            ((and (consp definition)
+                  (eq (car definition) 'autoload))
+             (if (or (eq (nth 4 definition) 'macro)
+                     (eq (nth 4 definition) t))
+                 (cons 'macro
+                       (funcall
+                        (@ (language elisp falias) make-falias)
+                        (function (lambda (&rest args)
+                                    (apply (cdr (autoload-do-load definition symbol nil)) args)))
+                        definition))
+               (funcall
+                (@ (language elisp falias) make-falias)
+                (function (lambda (&rest args)
+                            (apply (autoload-do-load definition symbol nil) args)))
+                definition)))
+            ((and (symbolp definition)
+                  (let ((fn (symbol-function definition)))
+                    (and (consp fn)
+                         (or (eq (car fn) 'macro)
+                             (and (eq (car fn) 'autoload)
+                                  (or (eq (nth 4 fn) 'macro)
+                                      (eq (nth 4 fn) t)))))))
+             (cons 'macro
+                   (funcall
+                    (@ (language elisp falias) make-falias)
+                    (function (lambda (&rest args) `(,definition ,@args)))
+                    definition)))
+            (t
              (funcall (@ (language elisp falias) make-falias)
-                      #'(lambda (&rest args) (apply definition args))
-                      definition)))
+                      (function (lambda (&rest args) (apply definition args)))
+                      definition))))
   definition)
 
-(defun load (file)
+(defun gload (file)
   (funcall (@ (system base compile) compile-file)
            file
            (funcall (@ (guile) symbol->keyword) 'from)
@@ -202,11 +318,6 @@
   t)
 
 ;;; Equality predicates
-
-(defun eq (obj1 obj2)
-  (if obj1
-      (funcall (@ (guile) eq?) obj1 obj2)
-    (null obj2)))
 
 (defun eql (obj1 obj2)
   (if obj1
@@ -231,13 +342,13 @@
 (fset 'fboundp (@ (language elisp runtime) symbol-fbound?))
 (fset 'intern (@ (guile) string->symbol))
 
-(defun defvaralias (new-alias base-variable &optional docstring)
-  (let ((fluid (funcall (@ (language elisp runtime) symbol-fluid)
-                        base-variable)))
-    (funcall (@ (language elisp runtime) set-symbol-fluid!)
-             new-alias
-             fluid)
-    base-variable))
+;(defun defvaralias (new-alias base-variable &optional docstring)
+;  (let ((fluid (funcall (@ (language elisp runtime) symbol-fluid)
+;                        base-variable)))
+;    (funcall (@ (language elisp runtime) set-symbol-fluid!)
+;             new-alias
+;             fluid)
+;    base-variable))
 
 ;;; Numerical type predicates
 
@@ -344,16 +455,6 @@
         newcdr)
     (signal 'wrong-type-argument `(consp ,cell))))
 
-(defun nthcdr (n list)
-  (let ((i 0))
-    (while (< i n)
-      (setq list (cdr list)
-            i (+ i 1)))
-    list))
-
-(defun nth (n list)
-  (car (nthcdr n list)))
-
 (defun %member (elt list test)
   (cond
    ((null list) nil)
@@ -400,10 +501,11 @@
 
 (defmacro dolist (spec &rest body)
   (apply #'(lambda (var list &optional result)
-             `(mapc #'(lambda (,var)
-                        ,@body
-                        ,result)
-                    ,list))
+             (list 'progn
+                   (list 'mapc
+                         (cons 'lambda (cons (list var) body))
+                         list)
+                   result))
          spec))
 
 ;;; Strings
@@ -582,6 +684,9 @@
 (defun print (object)
   (funcall (@ (guile) write) object))
 
+(defun prin1 (object)
+  (funcall (@ (guile) write) object))
+
 (defun terpri ()
   (funcall (@ (guile) newline)))
 
@@ -607,11 +712,83 @@
                                (@ (guile) *random-state*)))
 
 (defun random (&optional limit)
-  (if (eq limit t)
-      (setq %random-state
-            (funcall (@ (guile) random-state-from-platform))))
-  (funcall (@ (guile) random)
-           (if (wholenump limit)
-               limit
-             (@ (guile) most-positive-fixnum))
-           %random-state))
+   (if (eq limit t)
+       (setq %random-state
+             (funcall (@ (guile) random-state-from-platform))))
+   (funcall (@ (guile) random)
+            (if (wholenump limit)
+                limit
+              (@ (guile) most-positive-fixnum))
+            %random-state))
+
+(defmacro save-excursion (&rest body)
+  `(call-with-save-excursion #'(lambda () ,@body)))
+
+(defmacro save-current-buffer (&rest body)
+  `(call-with-save-current-buffer #'(lambda () ,@body)))
+
+(defmacro save-restriction (&rest body)
+  `(call-with-save-restriction #'(lambda () ,@body)))
+
+(defmacro track-mouse (&rest body)
+  `(call-with-track-mouse #'(lambda () ,@body)))
+
+(defmacro setq-default (var value &rest args)
+  `(progn (set-default ',var ,value)
+          ,(if (null args)
+               var
+             `(setq-default ,@args))))
+
+(defmacro catch (tag &rest body)
+  `(call-with-catch ,tag #'(lambda () ,@body)))
+
+(defmacro condition-case (var bodyform &rest args)
+  (if (consp args)
+      (let* ((handler (car args))
+             (handlers (cdr args))
+             (handler-conditions (car handler))
+             (handler-body (cdr handler)))
+        `(call-with-handler ',var
+                            ',handler-conditions
+                            #'(lambda () ,@handler-body)
+                            #'(lambda ()
+                                (condition-case ,var
+                                    ,bodyform
+                                  ,@handlers))))
+    bodyform))
+
+(defun backtrace-frame (nframes)
+  (let* ((stack (funcall (@ (guile) make-stack) t))
+         (frame (stack-ref stack nframes))
+         (proc (funcall (@ (guile) frame-procedure) frame))
+         (pname (or (and (%functionp proc)
+                         (funcall (@ (guile) procedure-name) proc))
+                    proc))
+         (args (funcall (@ (guile) frame-arguments) frame)))
+    (cons t (cons pname args))))
+
+(defun guile-backtrace (&rest args)
+  (interactive)
+  (let* ((stack (apply (@ (guile) make-stack) t args))
+         (frame (funcall (@ (guile) stack-ref) stack 1))
+         (space (funcall (@ (guile) integer->char) 32)))
+    (while frame
+      (princ (string 32 32))
+      (let ((proc (funcall (@ (guile) frame-procedure) frame)))
+        (prin1 (or (and (%functionp proc)
+                        (funcall (@ (guile) procedure-name) proc))
+                   proc)))
+      (prin1 (funcall (@ (guile) frame-arguments) frame))
+      (terpri)
+      (setq frame (funcall (@ (guile) frame-previous) frame)))
+    nil))
+
+(defun backtrace ()
+  (guile-backtrace))
+
+(defun %set-eager-macroexpansion-mode (ignore)
+  nil)
+
+(%define-compiler-macro require (form)
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
+     (funcall #'require ,@(cdr form))))

@@ -20,7 +20,7 @@
 
 # These variables can be set before you include bootstrap.am.
 GUILE_WARNINGS ?= -Wunbound-variable -Warity-mismatch -Wformat
-GUILE_OPTIMIZATIONS ?= -O2
+GUILE_OPTIMIZATIONS ?= -O0
 GUILE_TARGET ?= $(host)
 GUILE_BUILD_TAG ?= BOOTSTRAP
 

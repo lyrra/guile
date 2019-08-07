@@ -20,6 +20,7 @@
 
 (define-module (language elisp lexer)
   #:use-module (ice-9 regex)
+  #:use-module (language elisp runtime)
   #:export (get-lexer get-lexer/1))
 
 ;;; This is the lexical analyzer for the elisp reader.  It is
@@ -316,7 +317,9 @@
            (let ((cur (read-char port)))
              (case cur
                ((#\")
-                (return 'string (list->string (reverse result-chars))))
+                (return 'string
+                        (make-lisp-string
+                         (list->string (reverse result-chars)))))
                ((#\\)
                 (let ((escaped (read-char port)))
                   (case escaped
@@ -367,18 +370,24 @@
            (lambda (type str)
              (case type
                ((symbol)
-                ;; str could be empty if the first character is already
-                ;; something not allowed in a symbol (and not escaped)!
-                ;; Take care about that, it is an error because that
-                ;; character should have been handled elsewhere or is
-                ;; invalid in the input.
-                (if (zero? (string-length str))
-                    (begin
-                      ;; Take it out so the REPL might not get into an
-                      ;; infinite loop with further reading attempts.
-                      (read-char port)
-                      (error "invalid character in input" c))
-                    (return 'symbol (string->symbol str))))
+                (cond
+                 ((equal? str "nil")
+                  (return 'symbol #nil))
+                 ((equal? str "t")
+                  (return 'symbol #t))
+                 (else
+                  ;; str could be empty if the first character is already
+                  ;; something not allowed in a symbol (and not escaped)!
+                  ;; Take care about that, it is an error because that
+                  ;; character should have been handled elsewhere or is
+                  ;; invalid in the input.
+                  (if (zero? (string-length str))
+                      (begin
+                        ;; Take it out so the REPL might not get into an
+                        ;; infinite loop with further reading attempts.
+                        (read-char port)
+                        (error "invalid character in input" c))
+                      (return 'symbol (string->symbol str))))))
                ((integer)
                 ;; In elisp, something like "1." is an integer, while
                 ;; string->number returns an inexact real.  Thus we need

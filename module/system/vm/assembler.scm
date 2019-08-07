@@ -455,7 +455,8 @@ N-byte unit."
             constants inits
             shstrtab next-section-number
             meta sources
-            slot-maps)
+            slot-maps
+            to-file?)
   asm?
 
   ;; We write bytecode into a bytevector, growing the bytevector as
@@ -527,10 +528,16 @@ N-byte unit."
   ;; relative to the beginning of the text section.  SLOT-MAP is a
   ;; bitfield describing the stack at call sites, as an integer.
   ;;
-  (slot-maps asm-slot-maps set-asm-slot-maps!))
+  (slot-maps asm-slot-maps set-asm-slot-maps!)
+
+  (to-file? asm-to-file?))
+
+(define-inline (fresh-block)
+  (make-u32vector *block-size*))
 
 (define* (make-assembler #:key (word-size (target-word-size))
-                         (endianness (target-endianness)))
+                         (endianness (target-endianness))
+                         (to-file? #t))
   "Create an assembler for a given target @var{word-size} and
 @var{endianness}, falling back to appropriate values for the configured
 target."
@@ -539,7 +546,7 @@ target."
             word-size endianness
             vlist-null '()
             (make-string-table) 1
-            '() '() '()))
+            '() '() '() to-file?))
 
 (define (intern-section-name! asm string)
   "Add a string to the section name table (shstrtab)."
@@ -1232,7 +1239,11 @@ table, its existing label is used directly."
      ((array? obj)
       `((static-patch! ,label 1 ,(recur (shared-array-root obj)))))
      (else
-      (error "don't know how to intern" obj))))
+      (if (asm-to-file? asm)
+          (error "don't know how to intern" obj)
+          `((make-short-immediate 1 ,(vlist-length (asm-constants asm)))
+            (vector-ref 1 0 1)
+            (static-set! 1 ,label 0))))))
   (cond
    ((immediate-bits asm obj) #f)
    ((vhash-assoc obj (asm-constants asm)) => cdr)
@@ -1606,7 +1617,10 @@ a procedure to do that and return its label.  Otherwise return
          (let ((label (gensym "init-constants")))
            (emit-text asm
                       `((begin-program ,label ())
-                        (assert-nargs-ee/locals 1 1)
+                        ,@(if (asm-to-file? asm)
+                              '((assert-nargs-ee/locals 1 1))
+                              '((assert-nargs-ee/locals 2 0)
+                                (mov 0 1)))
                         ,@(reverse inits)
                         (reset-frame 1)
                         (load-constant 0 ,*unspecified*)
@@ -1773,7 +1787,7 @@ should be .data or .rodata), and return the resulting linker object.
                 (write-constant-reference buf pos elt)
                 (lp (1+ i)))))))
 
-       ((symbol? obj)
+       ((and (symbol? obj) (symbol-interned? obj))
         (write-placeholder asm buf pos))
 
        ((keyword? obj)
@@ -1858,7 +1872,9 @@ should be .data or .rodata), and return the resulting linker object.
               (lp (+ pos (* 3 word-size)) (cdr bounds) (cdr incs))))))
 
        (else
-        (error "unrecognized object" obj))))
+        (if (asm-to-file? asm)
+            (error "unrecognized object" obj)
+            (write-constant-reference buf pos obj)))))
 
     (define (add-relocs obj pos relocs)
       (match obj
@@ -2866,4 +2882,7 @@ procedure with label @var{rw-init}.  @var{rw-init} may be false.  If
 The result is a bytevector, by default linked so that read-only and
 writable data are on separate pages.  Pass @code{#:page-aligned? #f} to
 disable this behavior."
-  (link-elf (link-objects asm) #:page-aligned? page-aligned?))
+  (define (asm-constant-vector asm)
+    (list->vector (reverse (map car (vlist->list (asm-constants asm))))))
+  (let ((bv (link-elf (link-objects asm) #:page-aligned? page-aligned?)))
+    (cons bv (if (asm-to-file? asm) #f (asm-constant-vector asm)))))

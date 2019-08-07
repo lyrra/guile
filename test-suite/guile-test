@@ -1,5 +1,4 @@
-#!../meta/guile \
--e main -s
+#!../meta/guile -e main -s
 !#
 
 ;;;; guile-test --- run the Guile test suite
