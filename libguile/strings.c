@@ -1,4 +1,4 @@
-/* Copyright 1995-1996,1998,2000-2001,2004,2006,2008-2016,2018-2019
+/* Copyright 1995-1996,1998,2000-2001,2004,2006,2008-2016,2018-2019,2021
      Free Software Foundation, Inc.
 
    This file is part of Guile.
@@ -761,7 +761,7 @@ scm_i_string_set_x (SCM str, size_t p, scm_t_wchar chr)
 
 SCM
 scm_i_make_symbol (SCM name, scm_t_bits flags,
-		   unsigned long hash, SCM props)
+		   uintptr_t hash, SCM props)
 {
   SCM buf;
   size_t length = STRING_LENGTH (name);
@@ -774,7 +774,7 @@ scm_i_make_symbol (SCM name, scm_t_bits flags,
 
 SCM
 scm_i_c_make_symbol (const char *name, size_t len,
-		     scm_t_bits flags, unsigned long hash, SCM props)
+		     scm_t_bits flags, uintptr_t hash, SCM props)
 {
   SCM buf = make_stringbuf (len);
   memcpy (STRINGBUF_CHARS (buf), name, len);
@@ -1221,7 +1221,7 @@ SCM_DEFINE (scm_string_ref, "string-ref", 2, 0, 0,
 #define FUNC_NAME s_scm_string_ref
 {
   size_t len;
-  unsigned long idx;
+  uintptr_t idx;
 
   SCM_VALIDATE_STRING (1, str);
 
@@ -1258,7 +1258,7 @@ SCM_DEFINE (scm_string_set_x, "string-set!", 3, 0, 0,
 #define FUNC_NAME s_scm_string_set_x
 {
   size_t len;
-  unsigned long idx;
+  uintptr_t idx;
 
   SCM_VALIDATE_STRING (1, str);
 

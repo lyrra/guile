@@ -49,7 +49,7 @@ SCM_TO_TYPE_PROTO (SCM val)
 	{
 	  if (mpz_fits_ulong_p (SCM_I_BIG_MPZ (val)))
 	    {
-	      unsigned long n = mpz_get_ui (SCM_I_BIG_MPZ (val));
+	      uintptr_t n = mpz_get_ui (SCM_I_BIG_MPZ (val));
 #if SIZEOF_TYPE != 0 && SIZEOF_TYPE > SCM_SIZEOF_LONG
 	      return n;
 #else
@@ -95,13 +95,13 @@ SCM_TO_TYPE_PROTO (SCM val)
 SCM
 SCM_FROM_TYPE_PROTO (TYPE val)
 {
-#if SIZEOF_TYPE != 0 && SIZEOF_TYPE < SIZEOF_UINTPTR_T
+#if SIZEOF_TYPE != 0 && SIZEOF_TYPE < SCM_SIZEOF_INTPTR_T
   return SCM_I_MAKINUM (val);
 #else
   if (SCM_POSFIXABLE (val))
     return SCM_I_MAKINUM (val);
-  else if (val <= ULONG_MAX)
-    return scm_i_ulong2big (val);
+  else if (val <= UINTPTR_MAX)
+    return scm_i_untptr2big (val);
   else
     {
       SCM z = make_bignum ();

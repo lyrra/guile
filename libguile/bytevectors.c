@@ -810,14 +810,14 @@ SCM_DEFINE (scm_u8_list_to_bytevector, "u8-list->bytevector", 1, 0, 0,
 static inline void
 twos_complement (mpz_t value, size_t size)
 {
-  unsigned long bit_count;
+  uintptr_t bit_count;
 
-  /* We expect BIT_COUNT to fit in a unsigned long thanks to the range
+  /* We expect BIT_COUNT to fit in a uintptr_t thanks to the range
      checking on SIZE performed earlier.  */
-  bit_count = (unsigned long) size << 3UL;
+  bit_count = (uintptr_t) size << 3ULL;
 
-  if (SCM_LIKELY (bit_count < sizeof (unsigned long)))
-    mpz_ui_sub (value, 1UL << bit_count, value);
+  if (SCM_LIKELY (bit_count < sizeof (uintptr_t)))
+    mpz_ui_sub (value, 1ULL << bit_count, value);
   else
     {
       mpz_t max;

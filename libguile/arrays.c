@@ -342,7 +342,7 @@ SCM_DEFINE (scm_make_shared_array, "make-shared-array", 2, 0, 1,
   SCM imap;
   size_t k;
   ssize_t i;
-  long old_base, old_min, new_min, old_max, new_max;
+  ssize_t old_base, old_min, new_min, old_max, new_max;
   scm_t_array_dim *s;
 
   SCM_VALIDATE_REST_ARGUMENT (dims);
@@ -747,8 +747,8 @@ SCM_DEFINE (scm_array_contents, "array-contents", 1, 1, 0,
 	    return SCM_BOOL_F;
 	  if (scm_is_bitvector (SCM_I_ARRAY_V (ra))
               && (len != scm_c_bitvector_length (SCM_I_ARRAY_V (ra)) ||
-                  SCM_I_ARRAY_BASE (ra) % SCM_LONG_BIT ||
-                  len % SCM_LONG_BIT))
+                  SCM_I_ARRAY_BASE (ra) % SCM_INTPTR_T_BIT ||
+                  len % SCM_INTPTR_T_BIT))
             return SCM_BOOL_F;
 	}
 

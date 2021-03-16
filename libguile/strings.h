@@ -1,7 +1,7 @@
 #ifndef SCM_STRINGS_H
 #define SCM_STRINGS_H
 
-/* Copyright 1995-1998,2000-2001,2004-2006,2008-2011,2013,2015-2019
+/* Copyright 1995-1998,2000-2001,2004-2006,2008-2011,2013,2015-2019,2021
      Free Software Foundation, Inc.
 
    This file is part of Guile.
@@ -26,6 +26,7 @@
 #include <libguile/error.h>
 #include "libguile/inline.h"
 #include <libguile/snarf.h>
+#include "libguile/numbers.h"
 
 
 
@@ -250,10 +251,10 @@ SCM_INTERNAL void scm_i_string_set_x (SCM str, size_t p, scm_t_wchar chr);
 /* internal functions related to symbols. */
 
 SCM_INTERNAL SCM scm_i_make_symbol (SCM name, scm_t_bits flags,
-				    unsigned long hash, SCM props);
+				    uintptr_t hash, SCM props);
 SCM_INTERNAL SCM
 scm_i_c_make_symbol (const char *name, size_t len,
-		     scm_t_bits flags, unsigned long hash, SCM props);
+		     scm_t_bits flags, uintptr_t hash, SCM props);
 SCM_INTERNAL const char *scm_i_symbol_chars (SCM sym);
 SCM_INTERNAL const scm_t_wchar *scm_i_symbol_wide_chars (SCM sym);
 SCM_INTERNAL size_t scm_i_symbol_length (SCM sym);

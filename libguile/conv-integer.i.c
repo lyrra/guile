@@ -49,7 +49,7 @@ SCM_TO_TYPE_PROTO (SCM val)
 	{
 	  if (mpz_fits_slong_p (SCM_I_BIG_MPZ (val)))
 	    {
-	      long n = mpz_get_si (SCM_I_BIG_MPZ (val));
+	      intptr_t n = mpz_get_si (SCM_I_BIG_MPZ (val));
 #if SIZEOF_TYPE != 0 && SIZEOF_TYPE > SCM_SIZEOF_LONG
 	      return n;
 #else
@@ -118,8 +118,8 @@ SCM_FROM_TYPE_PROTO (TYPE val)
 #else
   if (SCM_FIXABLE (val))
     return SCM_I_MAKINUM (val);
-  else if (val >= LONG_MIN && val <= LONG_MAX)
-    return scm_i_long2big (val);
+  else if (val >= INTPTR_MIN && val <= INTPTR_MAX)
+    return scm_i_intptr2big (val);
   else
     {
       SCM z = make_bignum ();
