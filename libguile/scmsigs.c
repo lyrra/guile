@@ -322,21 +322,15 @@ scm_sigaction (SCM signum, SCM handler, SCM flags)
 
 #if __MINGW32__
 
-int _mingw_debug_p ();
-
 SCM_DEFINE (scm_sigaction_for_thread, "sigaction", 1, 3, 0,
            (SCM signum, SCM handler, SCM flags, SCM thread),
             "sigaction stub")
 #define FUNC_NAME s_scm_sigaction_for_thread
 {
-  static int stub = 0;
   (void) signum;
   (void) handler;
   (void) flags;
   (void) thread;
-  if (_mingw_debug_p () && !stub)
-    fputs ("stub: sigaction", stderr);
-  stub = 1;
   return SCM_UNSPECIFIED;
 }
 #undef FUNC_NAME
