@@ -69,7 +69,6 @@
             port-for-each
             flush-all-ports
             %make-void-port
-            set-binary/text-mode!
 
             ;; Definitions from fports.c.
             open-file
