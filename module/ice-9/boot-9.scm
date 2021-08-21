@@ -2091,13 +2091,20 @@ non-locally, that exit determines the continuation."
                               (compile-time-file-name-convention))
                          'posix)
     ((posix)
+     ;(display "-------- ERROR YOU ARE RUNNING POSIX --------")
+     ;(newline)
+     ;((@@ (system base target) %target-type))
+     ;((fluid-ref (@@ (system base target) %target-type)))
+     ;(exit-posiy)
+     ;(abort)
      (define (file-name-separator? c)
        (char=? c #\/))
 
      (define file-name-separator-string "/")
 
      (define (absolute-file-name? file-name)
-       (string-prefix? "/" file-name)))
+       (or (string-prefix? "/" file-name)
+           (string-prefix? "C:" file-name))))
 
     ((windows)
      (define (file-name-separator? c)
