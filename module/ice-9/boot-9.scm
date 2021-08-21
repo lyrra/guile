@@ -2079,13 +2079,20 @@ non-locally, that exit determines the continuation."
   ;; emacs: (put 'compile-time-case 'scheme-indent-function 1)
   (compile-time-case (system-file-name-convention)
     ((posix)
+     ;(display "-------- ERROR YOU ARE RUNNING POSIX --------")
+     ;(newline)
+     ;((@@ (system base target) %target-type))
+     ;((fluid-ref (@@ (system base target) %target-type)))
+     ;(exit-posiy)
+     ;(abort)
      (define (file-name-separator? c)
        (char=? c #\/))
 
      (define file-name-separator-string "/")
 
      (define (absolute-file-name? file-name)
-       (string-prefix? "/" file-name)))
+       (or (string-prefix? "/" file-name)
+           (string-prefix? "C:" file-name))))
 
     ((windows)
      (define (file-name-separator? c)
