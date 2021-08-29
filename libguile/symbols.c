@@ -71,8 +71,8 @@ SCM_DEFINE (scm_sys_symbols, "%symbols", 0, 0, 0,
 /* {Symbols}
  */
 
-unsigned long
-scm_i_hash_symbol (SCM obj, unsigned long n, void *closure)
+unsigned long long
+scm_i_hash_symbol (SCM obj, unsigned long long n, void *closure)
 {
   return scm_i_symbol_hash (obj) % n;
 }
@@ -375,7 +375,7 @@ SCM_DEFINE (scm_symbol_hash, "symbol-hash", 1, 0, 0,
 #define FUNC_NAME s_scm_symbol_hash
 {
   SCM_VALIDATE_SYMBOL (1, symbol);
-  return scm_from_uintptr_t (scm_i_symbol_hash (symbol));
+  return scm_from_ulong_long (scm_i_symbol_hash (symbol));
 }
 #undef FUNC_NAME
 
