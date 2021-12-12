@@ -24,6 +24,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <c-strcase.h>
+#include <ctype.h>
 #include <process.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,7 @@
 #include <fcntl.h>
 
 #include "gc.h"        /* for scm_*alloc, scm_strdup */
+#include "filename.h"
 #include "threads.h"   /* for scm_i_scm_pthread_mutex_lock */
 
 #include "posix-w32.h"
