@@ -68,9 +68,9 @@ jobs:
       run: |
         bash ./build/ci/tools/setup_mingw.sh
     - name: Setup MSYS2
-      shell: ./msys64/msys2_shell.cmd
+      shell: cmd
       run: |
-        bash ./build/ci/tools/package_mingw.sh
+        msys64\usr\bin\mintty.exe -w hide /bin/env MSYSTEM=MINGW64 /bin/bash -l ./build/ci/tools/package_mingw.sh
     #- name: Build
     #  if: env.DO_BUILD == 'true'
     #  shell: cmd
