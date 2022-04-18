@@ -71,10 +71,10 @@ jobs:
       shell: bash
       run: |
         ./build/ci/tools/package_mingw.sh
-    #- name: Build
-    #  if: env.DO_BUILD == 'true'
-    #  shell: cmd
-    #  run: |
+    - name: Build
+      shell: bash
+      run: |
+        ./build/ci/tools/build_guile.sh
     #    build\ci\windows\build.bat -n ${{ github.run_id }}
     #- name: Package 
     #  if: env.DO_BUILD == 'true'
