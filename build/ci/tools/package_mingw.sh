@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
+echo Current dir:
+pwd
+
+C=`pwd`
+
 export MSYSTEM=mingw64
-export PATH=/mingw64/bin:/mingw64/lib:/usr/local/bin:/usr/bin:/bin
+export PATH=$C/msys64/mingw64/bin:$C/msys64/mingw64/lib:$C/msys64/usr/bin
 
 pacman -v --noconfirm -S base-devel mingw-w64-x86_64-toolchain \
 mingw-w64-x86_64-xpm-nox mingw-w64-x86_64-libtiff \
