@@ -63,10 +63,14 @@ jobs:
         echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
         echo "DO_APPCAST: $DO_APPCAST"
 
-    - name: Setup environment
+    - name: Install MSYS2
       shell: bash
       run: |
         bash ./build/ci/tools/setup_mingw.sh
+    - name: Setup MSYS2
+      shell: cmd
+      run: |
+        msys64/msys2_shell.cmd ./build/ci/tools/package_mingw.sh
     #- name: Build
     #  if: env.DO_BUILD == 'true'
     #  shell: cmd
