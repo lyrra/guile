@@ -461,7 +461,7 @@ vm-operations.h: vm-engine.c
 	@echo '' >> $@
 	@echo "#define FOR_EACH_VM_OPERATION(M) \\" >> $@
 	$(AM_V_GEN)$(GREP) '^ *VM_DEFINE_OP' $< \
-	| sed -e 's,VM_DEFINE_OP (\(.*\)).*,  M (\1) \\\ ,' >> $@
+	| sed -e 's,VM_DEFINE_OP (\(.*\)).*,  M (\1) \\ ,' >> $@
 	@echo '' >> $@
         @echo LHZ_______________________
 	@cat libguile/vm-operations.h
