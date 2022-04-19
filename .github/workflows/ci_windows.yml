@@ -28,6 +28,7 @@ jobs:
         install: >-
           base-devel
           git
+          mingw-w64-x86_64-autotools
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-gnutls
     - name: Cancel Previous Runs
