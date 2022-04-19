@@ -28,8 +28,8 @@ jobs:
       shell: bash
       run: |
         git branch
-        ls
         cp -a build/ci/tools build-ci-tools
+        ls -ltr
     - uses: actions/checkout@v3
       with:
         ref: wip-mingw
