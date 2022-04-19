@@ -21,19 +21,6 @@ jobs:
   build_x64:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: repoinfo
-    - name: copy CI
-      shell: bash
-      run: |
-        git branch
-        cp -a build/ci/tools build-ci-tools
-        ls -ltr
-        ls -ltr build-ci-tools
-    - uses: actions/checkout@v3
-      with:
-        ref: wip-mingw
     - uses: msys2/setup-msys2@v2
       with:
         msystem: mingw64
@@ -46,15 +33,16 @@ jobs:
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-gnutls
           mingw-w64-x86_64-gc
-    #- name: Cancel Previous Runs
-    #  uses: styfle/cancel-workflow-action@0.5.0
-    #  with:
-    #    access_token: ${{ github.token }}
-    #- name: Clone repository
-    #  uses: actions/checkout@v2
-    #  with:
-    #    submodules: 'true'
+    - uses: actions/checkout@v3
+      with:
+        ref: wip-mingw
+    - name: copy CI tools
+      shell: bash
+      run: |
+        git checkout repoinfo -- build
+        ls -ltr
+        find build
     - name: Build
       shell: msys2 {0}
       run: |
-        ./build-ci-tools/build_guile.sh
+        ./build/ci/tools/build_guile.sh
