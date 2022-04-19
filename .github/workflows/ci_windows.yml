@@ -21,6 +21,10 @@ jobs:
   build_x64:
     runs-on: windows-latest
     steps:
+    - name: Build
+      shell: bash
+      run: |
+        cp -a build/ci/tools build-ci-tools
     - uses: actions/checkout@v3
       with:
         ref: wip-mingw
@@ -47,4 +51,4 @@ jobs:
     - name: Build
       shell: msys2 {0}
       run: |
-        ./build/ci/tools/build_guile.sh
+        ./build-ci-tools/build_guile.sh
