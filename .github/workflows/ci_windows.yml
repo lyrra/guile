@@ -49,5 +49,5 @@ jobs:
     - name: Build
       shell: msys2 {0}
       run: |
-        make
-        cat lib/iconv_open-zos.h
+        ./build/ci/tools/build_guile.sh
+
