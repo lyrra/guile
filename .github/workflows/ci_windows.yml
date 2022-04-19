@@ -21,9 +21,11 @@ jobs:
   build_x64:
     runs-on: windows-latest
     steps:
-    - name: Build
+    - name: copy CI
       shell: bash
       run: |
+        git branch
+        ls
         cp -a build/ci/tools build-ci-tools
     - uses: actions/checkout@v3
       with:
