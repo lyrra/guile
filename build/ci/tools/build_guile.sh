@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+git branch
+
 echo setup mingw64 environment
 
 C=`pwd`
