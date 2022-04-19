@@ -50,3 +50,4 @@ jobs:
       shell: msys2 {0}
       run: |
         make
+        cat lib/iconv_open-zos.h
