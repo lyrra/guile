@@ -38,7 +38,15 @@ jobs:
     - uses: actions/checkout@v3
       with:
         ref: wip-mingw
+    - name: Autogen
+      shell: msys2 {0}
+      run: |
+        ./autogen.sh
+    - name: Configure
+      shell: msys2 {0}
+      run: |
+        ./build/ci/tools/configure_guile.sh
     - name: Build
       shell: msys2 {0}
       run: |
-        ./build/ci/tools/build_guile.sh
+        make
