@@ -35,6 +35,7 @@ jobs:
           mingw-w64-x86_64-libtool
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-gnutls
+          mingw-w64-x86_64-gc
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.5.0
       with:
