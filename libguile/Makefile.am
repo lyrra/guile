@@ -893,6 +893,7 @@ MKDEP = gcc -M -MG $(DEFS) $(AM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS)
 .syms.c:
 	$(AM_V_GEN) 							\
 	cat $< | while read sym ; do					\
+	  sym=$${sym//[$$'\t\r\n']} ;					\
 	  echo "#ifdef $$sym" ;						\
 	  echo "scm_c_define (\"$$sym\", scm_from_int ($$sym));" ;	\
 	  echo "#endif" ;						\
