@@ -39,6 +39,6 @@ jobs:
       with:
         submodules: 'true'
     - name: Build
-      shell: msys {0}
+      shell: msys2 {0}
       run: |
         ./build/ci/tools/build_guile.sh
