@@ -22,4 +22,5 @@ echo Running configure
             --disable-silent-rules --enable-jit=no \
             --enable-guile-debug --enable-mini-gmp --with-bdw-gc=bdw-gc \
             host_alias=x86_64-w64-mingw32 \
-            --no-create --no-recursion
+            --no-create --no-recursion || exit 1
+make || exit 1
