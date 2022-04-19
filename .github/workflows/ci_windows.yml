@@ -19,8 +19,11 @@ on:
 
 jobs:
   build_x64:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: wip-mingw
     - uses: msys2/setup-msys2@v2
       with:
         msystem: mingw64
@@ -29,6 +32,7 @@ jobs:
           base-devel
           git
           mingw-w64-x86_64-autotools
+          mingw-w64-x86_64-libtool
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-gnutls
     - name: Cancel Previous Runs
