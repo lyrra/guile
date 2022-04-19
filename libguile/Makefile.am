@@ -463,10 +463,6 @@ vm-operations.h: vm-engine.c
 	$(AM_V_GEN)$(GREP) '^ *VM_DEFINE_OP' $< \
 	| sed -e 's,VM_DEFINE_OP (\(.*\)).*,  M (\1) \\ ,' >> $@
 	@echo '' >> $@
-        @echo LHZ_______________________
-	@cat libguile/vm-operations.h
-	@cat vm-operations.h
-        @echo LHZ_______________________DONE
 
 BUILT_INCLUDES = vm-operations.h scmconfig.h libpath.h
 BUILT_SOURCES = cpp-E.c cpp-SIG.c $(BUILT_INCLUDES) \
