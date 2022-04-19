@@ -18,4 +18,6 @@ echo "______________libguile/vm-operations.h____________________"
 cat libguile/vm-operations.h
 echo "______________libguile/modules.h__________________________"
 cat libguile/modules.h
+echo "______________libguile/cpp-E.h____________________________"
+cat libguile/cpp-E.c
 echo "__________________________________________________________"
