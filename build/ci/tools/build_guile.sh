@@ -3,8 +3,8 @@
 echo setup mingw64 environment
 
 C=`pwd`
-export MSYSTEM=mingw64
-export PATH=$C/msys64/mingw64/bin:$C/msys64/mingw64/lib:$C/msys64/usr/bin
+#export MSYSTEM=mingw64
+#export PATH=$C/msys64/mingw64/bin:$C/msys64/mingw64/lib:$C/msys64/usr/bin
 
 export CFLAGS=-I$C/msys64/mingw64/x86_64-w64-mingw32/include
 export LIBS=-L$C/msys64/mingw64/x86_64-w64-mingw32/lib
