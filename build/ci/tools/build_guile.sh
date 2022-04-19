@@ -12,12 +12,12 @@ export PKG_CONFIG_PATH=$C/msys64/mingw64/lib/pkgconfig
 
 echo Building
 
-make
+make || exit 1
 
-echo "______________libguile/vm-operations.h____________________"
-cat libguile/vm-operations.h
-echo "______________libguile/modules.h__________________________"
-cat libguile/modules.h
-echo "______________libguile/cpp-E.h____________________________"
-cat libguile/cpp-E.c
-echo "__________________________________________________________"
+#echo "______________libguile/vm-operations.h____________________"
+#cat libguile/vm-operations.h
+#echo "______________libguile/modules.h__________________________"
+#cat libguile/modules.h
+#echo "______________libguile/cpp-E.h____________________________"
+#cat libguile/cpp-E.c
+#echo "__________________________________________________________"
