@@ -14,4 +14,8 @@ echo Building
 
 make
 
+echo "______________libguile/vm-operations.h____________________"
 cat libguile/vm-operations.h
+echo "______________libguile/modules.h__________________________"
+cat libguile/modules.h
+echo "__________________________________________________________"
