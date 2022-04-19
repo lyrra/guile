@@ -21,6 +21,8 @@ jobs:
   build_x64:
     runs-on: windows-latest
     steps:
+    # An alternative to using the msys2 action (from https://github.com/marketplace/actions/setup-msys2),
+    # would be to do it manually: download msys2 from https://github.com/msys2/msys2-installer/releases/tag/nightly-x86_64
     - uses: msys2/setup-msys2@v2
       with:
         msystem: mingw64
