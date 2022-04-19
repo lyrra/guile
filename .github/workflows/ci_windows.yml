@@ -39,6 +39,7 @@ jobs:
     - name: copy CI tools
       shell: bash
       run: |
+        git branch -a
         git checkout repoinfo -- build
         ls -ltr
         find build
