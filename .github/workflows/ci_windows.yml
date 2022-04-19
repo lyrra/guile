@@ -30,6 +30,7 @@ jobs:
         git branch
         cp -a build/ci/tools build-ci-tools
         ls -ltr
+        ls -ltr build-ci-tools
     - uses: actions/checkout@v3
       with:
         ref: wip-mingw
