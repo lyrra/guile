@@ -21,6 +21,9 @@ jobs:
   build_x64:
     runs-on: windows-latest
     steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: repoinfo
     - name: copy CI
       shell: bash
       run: |
