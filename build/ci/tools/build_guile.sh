@@ -17,7 +17,7 @@ make
 echo "______________ running guild ____________________"
 cd libguile || exit 1
 echo "______________ cat guild ____________________"
-cat guild
+cat ../meta/guild
 echo "_________________________________________________"
 export GUILE_AUTO_COMPILE=0
 # gdb -batch -ex "run" -ex "bt" 
