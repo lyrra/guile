@@ -12,12 +12,14 @@ export PKG_CONFIG_PATH=$C/msys64/mingw64/lib/pkgconfig
 
 echo Building
 
-make || exit 1
+make
 
 echo "______________ running guild ____________________"
 cd libguile || exit 1
 GUILE_AUTO_COMPILE=0 ../meta/build-env guild snarf-check-and-output-texi
 echo "______________ DONE running guild ____________________"
+
+command -v gdb
 #cat libguile/vm-operations.h
 #echo "______________libguile/modules.h__________________________"
 #cat libguile/modules.h
