@@ -846,6 +846,7 @@ guile.texi: $(alldotdocfiles) guile$(EXEEXT)
 	$(dotdoc2texi) --manual > $@ || { rm $@; false; }
 
 guile-procedures.texi: $(alldotdocfiles) guile$(EXEEXT)
+	GUILE_AUTO_COMPILE=0 ../meta/build-env guild snarf-check-and-output-texi
 	$(AM_V_GEN)$(dotdoc2texi)
 	$(AM_V_GEN)$(dotdoc2texi)          > $@ || { rm $@; false; }
 
