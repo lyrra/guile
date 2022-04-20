@@ -14,7 +14,10 @@ echo Building
 
 make || exit 1
 
-#echo "______________libguile/vm-operations.h____________________"
+echo "______________ running guild ____________________"
+cd libguile || exit 1
+GUILE_AUTO_COMPILE=0 ../meta/build-env guild snarf-check-and-output-texi
+echo "______________ DONE running guild ____________________"
 #cat libguile/vm-operations.h
 #echo "______________libguile/modules.h__________________________"
 #cat libguile/modules.h
