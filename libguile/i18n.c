@@ -75,7 +75,7 @@
 /* Use Gnulib's header, which also provides `nl_item' & co.  */
 #include <langinfo.h>
 
-#ifndef HAVE_SETLOCALE
+#if 0 // ndef HAVE_SETLOCALE
 static inline char *
 setlocale (int category, const char *name)
 {
