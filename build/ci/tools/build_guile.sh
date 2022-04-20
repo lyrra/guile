@@ -16,6 +16,11 @@ make
 
 echo "______________ running guild ____________________"
 cd libguile || exit 1
+echo "______________ cat guild ____________________"
+cat guild
+echo "_________________________________________________"
+export GUILE_AUTO_COMPILE=0
+# gdb -batch -ex "run" -ex "bt" 
 GUILE_AUTO_COMPILE=0 ../meta/build-env guild snarf-check-and-output-texi
 echo "______________ DONE running guild ____________________"
 
