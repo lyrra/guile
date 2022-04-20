@@ -20,6 +20,11 @@ GUILE_AUTO_COMPILE=0 ../meta/build-env guild snarf-check-and-output-texi
 echo "______________ DONE running guild ____________________"
 
 command -v gdb
+echo "______________ LS DOT ____________________"
+ls -ltr 
+echo "______________ LS / ____________________"
+ls -ltr /
+echo "________________________________________"
 #cat libguile/vm-operations.h
 #echo "______________libguile/modules.h__________________________"
 #cat libguile/modules.h
