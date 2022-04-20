@@ -12,3 +12,7 @@ export PKG_CONFIG_PATH=$C/msys64/mingw64/lib/pkgconfig
             --disable-silent-rules --enable-jit=no \
             --enable-guile-debug --enable-mini-gmp --with-bdw-gc=bdw-gc \
             host_alias=x86_64-w64-mingw32 || exit 1
+
+echo __________ CONFIG.LOG _______________
+cat config.log
+echo __________ __________ _______________
