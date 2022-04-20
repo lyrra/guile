@@ -851,6 +851,7 @@ guile.texi: $(alldotdocfiles) guile$(EXEEXT)
 	$(dotdoc2texi) --manual > $@ || { rm $@; false; }
 
 guile-procedures.texi: $(alldotdocfiles) guile$(EXEEXT)
+	$(AM_V_GEN)$(dotdoc2texi)
 	$(AM_V_GEN)$(dotdoc2texi)          > $@ || { rm $@; false; }
 
 c-tokenize.c: c-tokenize.lex
