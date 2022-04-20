@@ -46,6 +46,7 @@ jobs:
           mingw-w64-x86_64-lz4
           mingw-w64-x86_64-pcre2
           mingw-w64-x86_64-readline
+          mingw-w64-x86_64-gdb
     - uses: actions/checkout@v3
       with:
         ref: wip-mingw
