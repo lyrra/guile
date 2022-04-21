@@ -16,12 +16,12 @@ make
 
 echo "______________ running guild ____________________"
 cd libguile || exit 1
-echo "______________ cat guild ____________________"
-cat ../meta/guild
 
 echo _______ insert gdb into guild ________
 
-sed -i 's/^exec/gdb -batch -ex "run" -ex "bt"/'
+sed -i 's/^exec/gdb -batch -ex "run" -ex "bt" --args/' ../meta/guild
+echo "______________ cat guild ____________________"
+cat ../meta/guild
 
 echo "_________________________________________________"
 export GUILE_AUTO_COMPILE=0
