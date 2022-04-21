@@ -18,6 +18,11 @@ echo "______________ running guild ____________________"
 cd libguile || exit 1
 echo "______________ cat guild ____________________"
 cat ../meta/guild
+
+echo _______ insert gdb into guild ________
+
+sed -i 's/^exec/gdb -batch -ex "run" -ex "bt"/'
+
 echo "_________________________________________________"
 export GUILE_AUTO_COMPILE=0
 # gdb -batch -ex "run" -ex "bt" 
@@ -28,7 +33,7 @@ command -v gdb
 echo "______________ LS DOT ____________________"
 ls -ltr 
 echo "______________ LS / ____________________"
-ls -ltr /
+ls -ltr /mingw64
 echo "________________________________________"
 #cat libguile/vm-operations.h
 #echo "______________libguile/modules.h__________________________"
