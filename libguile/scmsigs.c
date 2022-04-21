@@ -366,6 +366,7 @@ SCM_DEFINE (scm_sigaction_for_thread, "sigaction", 1, 3, 0,
 	    "structures.")
 #define FUNC_NAME s_scm_sigaction_for_thread
 {
+  fprintf(stderr, "---- x0 ----\n");
   int csig;
 #ifdef HAVE_SIGACTION
   struct sigaction action;
@@ -380,6 +381,7 @@ SCM_DEFINE (scm_sigaction_for_thread, "sigaction", 1, 3, 0,
   SCM old_handler;
 
   csig = scm_to_signed_integer (signum, 0, NSIG-1);
+  fprintf(stderr, "---- x1 sig: %i ----\n", csig);
 
 #if defined(HAVE_SIGACTION)
   action.sa_flags = 0;
@@ -462,6 +464,7 @@ SCM_DEFINE (scm_sigaction_for_thread, "sigaction", 1, 3, 0,
      because they can't currently be handled by Scheme code.
   */
 
+  fprintf(stderr, "---- xA ----\n");
   switch (csig)
     {
       /* This list of program error signals is from the GNU Libc
