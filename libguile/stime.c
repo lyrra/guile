@@ -300,7 +300,7 @@ SCM_DEFINE (scm_gettimeofday, "gettimeofday", 0, 0, 0,
 #else
   timet t = time (NULL);
   if (errno) {
-    fprintf(stderr, "ERROR: %s\n", strerror());
+    fprintf(stderr, "ERROR: %s\n", strerror(errno));
     SCM_SYSERROR;
   } else
     return scm_cons (scm_from_long ((long)t), SCM_INUM0);
