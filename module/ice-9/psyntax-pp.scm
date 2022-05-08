@@ -3400,12 +3400,13 @@
     (lambda* (filename proc #:key (dirname (syntax-dirname filename) #:dirname))
       "Like @code{call-with-input-file}, except relative paths are\nsearched relative to the @var{dirname} instead of the current working\ndirectory.  Also, @var{filename} can be a syntax object; in that case,\nand if @var{dirname} is not specified, the @code{syntax-source} of\n@var{filename} is used to obtain a base directory for relative file\nnames."
       (let ((filename (syntax->datum filename)))
+        (format #t "call-with-include-port (a) ~s abs: ~s~%" filename (absolute-file-name? filename))
         (let ((p (open-input-file
                    (if (absolute-file-name? filename)
                      filename
                      (if dirname
                        (in-vicinity dirname filename)
-                       (error "attempt to include relative file name but could not determine base dir"))))))
+                       (error "attempt-a to include relative file name but could not determine base dir"))))))
           (let ((enc (file-encoding p)))
             (set-port-encoding! p (let ((t enc)) (if t t "UTF-8")))
             (call-with-values
