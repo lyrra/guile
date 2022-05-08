@@ -299,10 +299,10 @@ SCM_DEFINE (scm_gettimeofday, "gettimeofday", 0, 0, 0,
 		   scm_from_long (time.tv_usec));
 #else
   timet t = time (NULL);
-  if (errno) {
+  if (errno) { // isn't errno set by time() on windows?
     fprintf(stderr, "ERROR: %s\n", strerror(errno));
-    SCM_SYSERROR;
-  } else
+    //SCM_SYSERROR;
+  } //else
     return scm_cons (scm_from_long ((long)t), SCM_INUM0);
 #endif
 }
