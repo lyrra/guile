@@ -3406,7 +3406,7 @@
                      filename
                      (if dirname
                        (in-vicinity dirname filename)
-                       (error "attempt-a to include relative file name but could not determine base dir"))))))
+                       (error "attempt-a to include relative file name but could not determine base dir, filename=~s" filename))))))
           (let ((enc (file-encoding p)))
             (set-port-encoding! p (let ((t enc)) (if t t "UTF-8")))
             (call-with-values
