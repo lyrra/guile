@@ -21,7 +21,6 @@
 
 AUTOMAKE_OPTIONS = gnu
 
-SUBDIRS = ref r5rs
 
 dist_man1_MANS = guile.1
 
