@@ -2121,7 +2121,9 @@ non-locally, that exit determines the continuation."
 
      (define (absolute-file-name? file-name)
        (or (string-prefix? "/" file-name)
-           (string-prefix? "C:" file-name))))
+           ; ugly as hell
+           (string-prefix? "C:" file-name)
+           (string-prefix? "D:" file-name))))
 
     ((windows)
      (define (file-name-separator? c)
