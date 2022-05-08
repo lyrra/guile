@@ -3270,6 +3270,7 @@ and if @var{dirname} is not specified, the @code{syntax-source} of
 @var{filename} is used to obtain a base directory for relative file
 names."
       (let* ((filename (syntax->datum filename))
+             (x (format #t "call-with-include-port (a) ~s abs: ~s~%" filename (absolute-file-name? filename)))
              (p (open-input-file
                  (cond ((absolute-file-name? filename)
                         filename)
@@ -3277,7 +3278,7 @@ names."
                         (in-vicinity dirname filename))
                        (else
                         (error
-                         "attempt to include relative file name but could not determine base dir")))))
+                         "attempt-b to include relative file name but could not determine base dir")))))
              (enc (file-encoding p)))
 
         ;; Choose the input encoding deterministically.
