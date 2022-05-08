@@ -299,9 +299,10 @@ SCM_DEFINE (scm_gettimeofday, "gettimeofday", 0, 0, 0,
 		   scm_from_long (time.tv_usec));
 #else
   timet t = time (NULL);
-  if (errno)
+  if (errno) {
+    fprintf(stderr, "ERROR: %s\n", strerror());
     SCM_SYSERROR;
-  else
+  } else
     return scm_cons (scm_from_long ((long)t), SCM_INUM0);
 #endif
 }
