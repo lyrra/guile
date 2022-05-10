@@ -62,4 +62,12 @@ jobs:
       shell: msys2 {0}
       run: |
         ./build/ci/tools/build_guile.sh
+    - name: Package
+      shell: msys2 {0}
+      run: |
+        ./build/ci/tools/package_mingw.sh
+    - uses: actions/upload-artifact@v3
+      with:
+        name: guile-3-mingw64
+        path: guile-3-mingw64.zip
 
