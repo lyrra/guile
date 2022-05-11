@@ -29,6 +29,7 @@ jobs:
         update: true
         install: >-
           base-devel
+          zip
           git
           gettext-devel
           mingw-w64-x86_64-autotools
