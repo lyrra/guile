@@ -790,9 +790,23 @@ scm_init_scmsigs ()
       orig_handlers[i] = SIG_ERR;
 #endif
     }
-
++  /* FIX-20220529 LAV: we install an signal handler here.
++   * An handler that will do an internal signal delivery.
++   * The problem is that the receiving side of the signal
++   * is not yet setup (ice-9/top-repl/call-with-sigint)
++   * Also, not sure it works, even though the SIGINT (ctrl-c)
++   * is captured and the handler (take_signal) is called,
++   * someone is forcing guile to exit to the terminal.
++   * And strangely leaving a process running,  since
++   * we did captured the ctrl-c. This is problem is seen
++   * if you do ctrl-c after this call below, but dont before.
++   */
++  /* Strange: if you run this sleep-loop after having called install_mingw_take_signal
++   * then ctrl-c will force guile to exit to the terminal.
++   * But, this thread will still be running in the background, running the sleep-loop.
++   */
 #ifdef __MINGW32__
-  install_mingw_take_signal ();
+  //install_mingw_take_signal ();
 #endif
 
   scm_c_define ("NSIG", scm_from_long (NSIG));
