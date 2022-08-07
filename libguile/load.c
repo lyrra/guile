@@ -69,6 +69,61 @@
 #define R_OK 4
 #endif
 
+/**** debug log printing ****************************************/
+void debuglogopen ();
+void debuglogwrite (char *str);
+FILE *debuglogfh = NULL;
+char debugbigbuf[4096];
+
+void debuglogopen () {
+  // see https://stackoverflow.com/questions/61426558/why-does-printf-with-n-still-not-flush-on-windows
+  (void)setvbuf(stdout, NULL, _IONBF, 0);
+  (void)setvbuf(stderr, NULL, _IONBF, 0);
+
+  debuglogfh = fopen("debug.log", "w");
+}
+
+void debuglogwrite (char *str) {
+  if (!debuglogfh) debuglogopen();
+  fwrite(str, 1, strlen(str), debuglogfh);
+  fflush(debuglogfh);
+  int fd = fileno(debuglogfh);
+#ifdef WIN32
+  _commit(fd);
+#else
+  fsync(fd);
+#endif
+}
+
+#define LLZ(fmt, ...) \
+  sprintf(debugbigbuf, fmt, ##__VA_ARGS__), \
+  debuglogwrite(debugbigbuf)
+/**************************************************************/
+
+
+SCM_DEFINE (scm_debug_print, "debug-print", 1, 0, 0, 
+           (SCM str),
+	    "print @var{str} to stderr and debug.log file")
+#define FUNC_NAME s_scm_debug_print
+{
+  SCM ret = SCM_UNSPECIFIED;
+  int len = scm_to_locale_stringbuf (str, debugbigbuf, 4096);
+  debugbigbuf[len] = '\n';
+  debugbigbuf[len+1] = 0;
+  //strcat(debugbigbuf, "\n");
+  debuglogwrite(debugbigbuf);
+  fputs(debugbigbuf, stderr);
+  fflush(stderr);
+  int fd = fileno(stderr);
+#ifdef WIN32
+  _commit(fd);
+#else
+  fsync(fd);
+#endif
+  return ret;
+}
+#undef FUNC_NAME
+
 
 /* Loading a file, given an absolute filename.  */
 
