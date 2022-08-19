@@ -1,0 +1,62 @@
+name: CI_Windows_msys2_mingw64
+
+on:
+  pull_request:
+    branches:
+    - wip-mingw
+  schedule:
+    - cron: '0 4 */7 * *'
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        required: true
+        default: 'devel_build'
+      publish:
+        description: 'Publish to FTP: on - publish'
+        required: false
+        default: 'off'   
+
+jobs:
+  build_x64:
+    runs-on: windows-latest
+    steps:
+    # An alternative to using the msys2 action (from https://github.com/marketplace/actions/setup-msys2),
+    # would be to do it manually: download msys2 from https://github.com/msys2/msys2-installer/releases/tag/nightly-x86_64
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: mingw64
+        update: true
+        install: >-
+          base-devel
+          zip
+          git
+          gettext-devel
+          mingw-w64-x86_64-autotools
+          mingw-w64-x86_64-libtool
+          mingw-w64-x86_64-toolchain
+          mingw-w64-x86_64-binutils
+          mingw-w64-x86_64-gettext
+          mingw-w64-x86_64-gnutls
+          mingw-w64-x86_64-gc
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-gcc-libs
+          mingw-w64-x86_64-libffi
+          mingw-w64-x86_64-libgcrypt
+          mingw-w64-x86_64-libtasn1
+          mingw-w64-x86_64-lz4
+          mingw-w64-x86_64-pcre2
+          mingw-w64-x86_64-readline
+          mingw-w64-x86_64-gdb
+    - uses: actions/checkout@v3
+      with:
+        ref: wip-mingw
+    - name: Package
+      shell: msys2 {0}
+      run: |
+        ./build/ci/tools/package_mingw.sh
+    - uses: actions/upload-artifact@v3
+      with:
+        name: mingw-w64-guile3
+        path: mingw-w64-guile-3.pkg.tar.zst
+
