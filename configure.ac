@@ -1539,10 +1539,6 @@ AC_CONFIG_FILES([
   stage0/Makefile
   stage1/Makefile
   stage2/Makefile
-  prebuilt/Makefile
-  prebuilt/x86_64-unknown-linux-gnu/Makefile
-  prebuilt/i686-pc-linux-gnu/Makefile
-  prebuilt/mips-unknown-linux-gnu/Makefile
 ])
 
 
