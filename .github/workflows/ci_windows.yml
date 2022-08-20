@@ -58,11 +58,11 @@ jobs:
     - name: Configure
       shell: msys2 {0}
       run: |
-        ./build/ci/tools/configure_guile.sh
+        GITSRCDIR=. ./build/ci/tools/configure_guile.sh
     - name: Build
       shell: msys2 {0}
       run: |
-        ./build/ci/tools/build_guile.sh
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
     - name: Package
       shell: msys2 {0}
       run: |
