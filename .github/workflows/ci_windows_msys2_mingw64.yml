@@ -59,6 +59,10 @@ jobs:
       shell: msys2 {0}
       run: |
         GITSRCDIR=. ./build/ci/tools/configure_guile.sh
+    - name: Build_libguile
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile_libguile.sh
     - name: Build
       shell: msys2 {0}
       run: |
