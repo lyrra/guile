@@ -63,7 +63,35 @@ jobs:
       shell: msys2 {0}
       run: |
         GITSRCDIR=. ./build/ci/tools/build_guile_libguile.sh
-    - name: Build
+    - name: Build-1
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-2
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-3
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-4
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-5
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-6
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-7
+      shell: msys2 {0}
+      run: |
+        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+    - name: Build-8
       shell: msys2 {0}
       run: |
         GITSRCDIR=. ./build/ci/tools/build_guile.sh
