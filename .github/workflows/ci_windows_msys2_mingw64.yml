@@ -101,6 +101,10 @@ jobs:
         ./build/ci/tools/package_mingw.sh
     - uses: actions/upload-artifact@v3
       with:
+        name: mingw-w64-x86_64-guile3-3-1-any
+        path: mingw-w64-x86_64-guile3-3-1-any.pkg.tar.zst
+    - uses: actions/upload-artifact@v3
+      with:
         name: mingw-w64-guile3
-        path: mingw-w64-guile-3.pkg.tar.zst
+        path: guile-3-mingw64.zip
 
