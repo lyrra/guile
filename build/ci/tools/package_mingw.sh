@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cp ../r/PKGBUILD . # copy PKGBUILD from other branch
 echo "--- CLRF in PKGBUILD, remote it"
 sed -i 's/\r//g' PKGBUILD
 echo "-------- hexdump PKGBUILD ------------"
