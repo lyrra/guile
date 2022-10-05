@@ -1,15 +1,12 @@
 name: CI_Windows_msys2_mingw64
 
 on:
-  pull_request:
-    branches:
-    - wip-mingw
   schedule:
     - cron: '0 4 */7 * *'
   workflow_dispatch:
     inputs:
       build_mode:
-        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        description: 'Build mode: devel_build, stable_build'
         required: true
         default: 'devel_build'
       publish:
@@ -35,79 +32,94 @@ jobs:
           mingw-w64-x86_64-autotools
           mingw-w64-x86_64-libtool
           mingw-w64-x86_64-toolchain
-          mingw-w64-x86_64-binutils
           mingw-w64-x86_64-gettext
           mingw-w64-x86_64-gnutls
           mingw-w64-x86_64-gc
-          mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-gcc-libs
           mingw-w64-x86_64-libffi
           mingw-w64-x86_64-libgcrypt
           mingw-w64-x86_64-libtasn1
           mingw-w64-x86_64-lz4
           mingw-w64-x86_64-pcre2
           mingw-w64-x86_64-readline
-          mingw-w64-x86_64-gdb
-    - uses: actions/checkout@v3
+    - name: Clone repo repoinfo
+      uses: actions/checkout@v3
+      with:
+        ref: repoinfo
+        path: r
+    - name: Clone repo wip-mingw
+      uses: actions/checkout@v3
       with:
         ref: wip-mingw
+        path: m
     - name: Autogen
       shell: msys2 {0}
       run: |
+        cd m
         ./autogen.sh
     - name: Configure
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/configure_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/configure_guile.sh
     - name: Build_libguile
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile_libguile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile_libguile.sh
     - name: Build-1
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-2
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-3
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-4
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-5
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-6
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-7
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Build-8
       shell: msys2 {0}
       run: |
-        GITSRCDIR=. ./build/ci/tools/build_guile.sh
+        cd m
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
     - name: Package
       shell: msys2 {0}
       run: |
-        ./build/ci/tools/package_mingw.sh
+        cd m
+        ../r/build/ci/tools/package_mingw.sh
     - uses: actions/upload-artifact@v3
       with:
-        name: mingw-w64-x86_64-guile3-3.0.5-1-any
-        path: mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
+        name:   mingw-w64-x86_64-guile3-3.0.5-1-any
+        path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
 
     - uses: actions/upload-artifact@v3
       with:
         name: mingw-w64-guile3
-        path: guile-3-mingw64.zip
+        path: m/guile-3-mingw64.zip
 
     - name: version
       run: echo "::set-output name=version::$(date +%Y%m%d-%H%M)"
@@ -119,7 +131,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
+        tag_name: release-${{ steps.version.outputs.version }}
         release_name: ${{ steps.version.outputs.version }}
         draft: false
         prerelease: false
@@ -130,7 +142,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-        asset_name: mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
+        asset_path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
+        asset_name:   mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
         asset_content_type: application/zip
 
