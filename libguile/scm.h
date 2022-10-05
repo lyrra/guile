@@ -718,11 +718,12 @@ enum scm_tc8_tags
 
 /* SCM_API is a macro prepended to all function and data definitions
    which should be exported from libguile. */
-#if defined BUILDING_LIBGUILE && HAVE_VISIBILITY
-# define SCM_API extern __attribute__((__visibility__("default")))
-#elif defined BUILDING_LIBGUILE && (defined _WIN32 || defined __CYGWIN__)
+
+#if defined BUILDING_LIBGUILE && (defined _WIN32 || defined __CYGWIN__ || defined _MSC_VER)
 # define SCM_API __declspec(dllexport) extern
-#elif defined _WIN32 || defined __CYGWIN__
+#elif defined BUILDING_LIBGUILE && HAVE_VISIBILITY
+# define SCM_API extern __attribute__((__visibility__("default")))
+#elif defined _MSC_VER
 # define SCM_API __declspec(dllimport) extern
 #else
 # define SCM_API extern
