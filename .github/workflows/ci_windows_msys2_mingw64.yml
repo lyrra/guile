@@ -154,6 +154,7 @@ jobs:
         with:
           name: mingw-w64-guile3
       - name: Upload Release nightly
+        shell: msys2 {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
