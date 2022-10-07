@@ -115,16 +115,13 @@ jobs:
       with:
         name:   mingw-w64-x86_64-guile3-3.0.5-1-any
         path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-
     - uses: actions/upload-artifact@v3
       with:
         name: mingw-w64-guile3
         path: m/guile-3-mingw64.zip
-
     - name: version
       run: echo "::set-output name=version::$(date +%Y%m%d-%H%M)"
       id: version
-
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -135,6 +132,16 @@ jobs:
         release_name: ${{ steps.version.outputs.version }}
         draft: false
         prerelease: false
+    - name: Upload Release
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
+        asset_name:   mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
+        asset_content_type: application/zip
   upload:
     permissions:
       contents: write
@@ -146,16 +153,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: mingw-w64-guile3
-      - name: Upload Release
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-          asset_name:   mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-          asset_content_type: application/zip
       - name: Upload Release nightly
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
