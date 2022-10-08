@@ -114,7 +114,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: mingw-w64-guile3
-        path: m/guile-3-mingw64.zip
+        path: m/guile3-mingw64.zip
     - name: version
       run: echo "::set-output name=version::$(date +%Y%m%d-%H%M)"
       id: version
@@ -150,14 +150,12 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: mingw-w64-guile3
+          name: mingw-w64-x86_64-guile3-3.0.5-1-any
       - name: Upload Release nightly
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           ls
-          ls f
-          ls m
           gh release upload nightly-mingw mingw* --clobber -R ${{ github.repository }}
 
