@@ -154,7 +154,10 @@ jobs:
       - name: Upload Release nightly
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
           ls
-          gh release upload nightly-mingw m/mingw* --clobber -R ${{ github.repository }}
+          ls f
+          ls m
+          gh release upload nightly-mingw mingw* --clobber -R ${{ github.repository }}
 
