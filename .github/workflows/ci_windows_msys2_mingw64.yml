@@ -124,8 +124,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: release-${{ steps.version.outputs.version }}
-        release_name: ${{ steps.version.outputs.version }}
+        tag_name: release-mingw-${{ steps.version.outputs.version }}
+        release_name: mingw-${{ steps.version.outputs.version }}
         draft: false
         prerelease: false
     - name: Upload Release
@@ -134,7 +134,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`.
+        # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
         asset_name:   mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
         asset_content_type: application/zip
@@ -154,5 +156,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ls
-          gh release upload nightly-mingw mingw* --clobber -R ${{ github.repository }}
+          gh release upload nightly-mingw m/mingw* --clobber -R ${{ github.repository }}
 
