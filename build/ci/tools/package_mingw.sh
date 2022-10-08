@@ -45,6 +45,6 @@ find . | \
           -e '^./COPYING$' \
           -e '^./INSTALL$' \
           -e '^./THANKS$' \
-     | zip guile-3-mingw64.zip -@
+     | zip guile3-mingw64.zip -@
 
-ls -ltr guile-3-mingw64.zip
+ls -ltr guile3-mingw64.zip
