@@ -14,3 +14,6 @@ make -C meta
 echo make libguile/
 make -C libguile
 
+echo "content of libguile/libpath.h:"
+cat libguile/libpath.h
+echo "------------------------------"
