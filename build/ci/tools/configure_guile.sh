@@ -21,7 +21,7 @@ export BDW_GC_LIBS="/d/a/_temp/msys64/mingw64/lib/libgc.a -lgc"
 #echo _________________________
 
 $GITSRCDIR/configure --prefix=/mingw64 --host=x86_64-w64-mingw32 \
-            --disable-silent-rules --enable-jit=no \
+            --disable-silent-rules --enable-jit=no --with-threads \
             --enable-guile-debug --enable-mini-gmp --with-bdw-gc=bdw-gc \
             host_alias=x86_64-w64-mingw32
 
