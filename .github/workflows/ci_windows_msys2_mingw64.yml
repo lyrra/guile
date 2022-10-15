@@ -115,31 +115,14 @@ jobs:
       with:
         name: mingw-w64-guile3
         path: m/guile3-mingw64.zip
-    - name: version
-      run: echo "::set-output name=version::$(date +%Y%m%d-%H%M)"
-      id: version
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: release-mingw-${{ steps.version.outputs.version }}
-        release_name: mingw-${{ steps.version.outputs.version }}
-        draft: false
-        prerelease: false
-    - name: Upload Release
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`.
-        # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-        asset_name:   mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-        asset_content_type: application/zip
+      shell: bash
+      run: |
+        ls -ltr
+        gh release create release-mingw-$(date +%Y%m%d-%H%M) m/mingw*.pkg.tar.zst --generate-notes --target=wip-mingw
   upload:
     permissions:
       contents: write
