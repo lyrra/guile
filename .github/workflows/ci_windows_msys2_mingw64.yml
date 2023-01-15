@@ -141,7 +141,5 @@ jobs:
         shell: bash
         run: |
           ls -ltr
-          cd m
-          ls -ltr
           gh release upload weekly-mingw mingw* --clobber -R ${{ github.repository }}
 
