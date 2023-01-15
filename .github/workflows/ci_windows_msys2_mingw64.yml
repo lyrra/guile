@@ -123,7 +123,7 @@ jobs:
       run: |
         cd m
         ls -ltr
-        gh release create release-mingw-$(date +%Y%m%d-%H%M) m/mingw*.pkg.tar.zst --generate-notes --target=wip-mingw
+        #gh release create release-mingw-$(date +%Y%m%d-%H%M) mingw*.pkg.tar.zst --generate-notes --target=wip-mingw
   upload:
     permissions:
       contents: write
