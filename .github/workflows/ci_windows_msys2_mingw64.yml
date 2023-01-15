@@ -123,7 +123,7 @@ jobs:
       run: |
         cd m
         ls -ltr
-        #gh release create release-mingw-$(date +%Y%m%d-%H%M) mingw*.pkg.tar.zst --generate-notes --target=wip-mingw
+        gh release create release-mingw-$(date +%Y%m%d-%H%M) mingw*.pkg.tar.zst --generate-notes --target=wip-mingw
   upload:
     permissions:
       contents: write
@@ -140,6 +140,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
+          ls -ltr
           cd m
           ls -ltr
           gh release upload weekly-mingw mingw* --clobber -R ${{ github.repository }}
