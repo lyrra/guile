@@ -142,6 +142,7 @@
 
 (define (symbol-desc symbol)
   (let ((symbol (schemify symbol)))
+    (list 'dummy symbol)
     (let ((module value-slot-module))
       (variable-ref (ensure-desc! module symbol)))))
 
