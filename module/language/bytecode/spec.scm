@@ -28,12 +28,14 @@
 
 (define (bytecode->value x e opts)
   (let ((thunk (load-thunk-from-memory
-                (if (bytevector? x)
-                    x
-                    (let ((port get-bv (open-bytevector-output-port)))
-                      (x port)
-                      (close-port port)
-                      (get-bv))))))
+                (cond
+                 ((bytevector? x) x)
+                 ((and (pair? x) (bytevector? (car x))) x)
+                 (else
+                  (let ((port get-bv (open-bytevector-output-port)))
+                    (x port)
+                    (close-port port)
+                    (get-bv)))))))
     (if (eq? e (current-module))
         ;; save a cons in this case
         (values (thunk) e e)
