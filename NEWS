@@ -60,6 +60,14 @@ capability to search for "libfoo" as "msys-foo.dll" on MSYS.
 The load-foreign-library option #:rename-on-cygwin? has been changed to
 #:host-type-rename?, and handles both Cygwin and MSYS.
 
+** Make piped-process and system* available on systems without fork
+
+Now that piped-process and system* are implemented in terms of
+`posix_spawn', they can be made available on systems without fork().
+Note that currently Guile does use fork in piped-process to set exit
+codes, so piped-process on systems without fork will have a different
+behavior with regards to exit codes.
+
 * Performance improvements
 
 ** `copy-file` now relies on `sendfile` rather than a read/write loop
