@@ -1,0 +1,114 @@
+name: CI_linux_elisp
+
+on:
+  schedule:
+    - cron: '0 4 */7 * *'
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel_build, stable_build'
+        required: true
+        default: 'devel_build'
+
+jobs:
+  build_x64:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.11.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repo repoinfo
+      uses: actions/checkout@v4
+      with:
+        ref: repoinfo
+        path: r
+    - name: Clone repo elisp
+      uses: actions/checkout@v4
+      with:
+        ref: elisp
+        path: g
+    - name: Autogen
+      run: |
+        cd g
+        ./autogen.sh
+    - name: Configure
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/configure_guile.sh
+    - name: Build_libguile
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile_libguile.sh
+    - name: Build-1
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-2
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-3
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-4
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-5
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-6
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-7
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Build-8
+      run: |
+        cd g
+        GITSRCDIR=. ../r/build/ci/tools/build_guile.sh
+    - name: Package
+      run: |
+        cd g
+        ../r/build/ci/tools/package_elisp.sh
+    - uses: actions/upload-artifact@v3
+      with:
+        name:   linux-x86_64-guile3-elisp
+        path: g/linux-x86_64-guile3-elisp.tar.xz
+    - uses: actions/upload-artifact@v3
+      with:
+        name: linux-x86_64-guile3
+        path: g/guile3-elisp.zip
+    - name: Create Release
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+        cd m
+        ls -ltr
+        gh release create release-elisp-$(date +%Y%m%d-%H%M) linux*elisp*tar.xz --generate-notes --target=elisp
+  upload:
+    permissions:
+      contents: write
+    needs:
+      - build_x64
+    if: github.ref == 'refs/heads/repoinfo'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: linux-x86_64-guile3-elisp
+      - name: Upload Release nightly
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          ls -ltr
+          gh release upload weekly-elisp linux*elisp* --clobber -R ${{ github.repository }}
+
