@@ -8,6 +8,7 @@ apt_packages_standard=(
   curl
   make
   gcc
+  gperf
   wget
   )
 
