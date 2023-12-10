@@ -9,6 +9,7 @@ apt_packages_standard=(
   make
   gcc
   gperf
+  libgc-dev
   libunistring-dev
   wget
   )
