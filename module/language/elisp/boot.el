@@ -106,8 +106,9 @@
        ,@body
        ,temp)))
 
-(defun interactive (&optional arg)
-  nil)
+;(defun interactive (&optional arg) nil)
+(defmacro interactive (&rest body)
+  `(quote (,@body)))
 
 (defmacro prog2 (form1 form2 &rest body)
   `(progn ,form1 (prog1 ,form2 ,@body)))
