@@ -28,15 +28,15 @@ jobs:
       with:
         ref: elisp
         path: g
+    - name: Setup
+      run: |
+        cd r
+        ./build/ci/linux/setup.sh
     - name: Autogen
       shell: bash
       run: |
         cd g
         ./autogen.sh
-    - name: Setup
-      run: |
-        cd r
-        ./build/ci/linux/setup.sh
     - name: Configure
       run: |
         cd g
