@@ -5,6 +5,7 @@ apt_packages_basic=(
   )
 
 apt_packages_standard=(
+  autopoint
   curl
   make
   gcc
