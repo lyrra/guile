@@ -94,10 +94,6 @@ jobs:
       with:
         name:   linux-x86_64-guile3-elisp
         path: g/linux-x86_64-guile3-elisp.tar.xz
-    - uses: actions/upload-artifact@v3
-      with:
-        name: linux-x86_64-guile3
-        path: g/guile3-elisp.zip
     - name: Create Release
       id: create_release
       env:
