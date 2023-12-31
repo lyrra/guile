@@ -29,7 +29,7 @@ jobs:
         ref: elisp
         path: g
     - name: Autogen
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ./autogen.sh
@@ -42,47 +42,47 @@ jobs:
         cd g
         ../r/build/ci/linux/configure.sh
     - name: Build_libguile
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile_libguile.sh
     - name: Build-1
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-2
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-3
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-4
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-5
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-6
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-8
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
     - name: Build-8
-      shell: msys2 {0}
+      shell: bash
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
