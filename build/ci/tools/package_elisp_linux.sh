@@ -6,6 +6,10 @@ ls -ltr build
 
 echo "------ Files to zip: ---------"
 
+echo "------ URSLOCAL: ---------"
+
+find /usr/local
+
 echo "------ zipping files: ---------"
 
 find . | \
@@ -18,9 +22,9 @@ find . | \
           -e '^./guile-readline/.libs/guile-readline.a$' \
           -e '^./guile-readline/.*\.go$' \
           -e '^./lib/.libs/libgnu.a$' \
-          -e '^./libguile/.libs/guile.exe$' \
-          -e '^./libguile/.libs/gen-scmconfig.exe$' \
-          -e '^./libguile/.libs/guile_filter_doc_snarfage.exe$' \
+          -e '^./libguile/.libs/guile$' \
+          -e '^./libguile/.libs/gen-scmconfig$' \
+          -e '^./libguile/.libs/guile_filter_doc_snarfage$' \
           -e '^./libguile/.libs/libguile-3.0-1.dll$' \
           -e '^./libguile/.libs/libguile-3.0.a$' \
           -e '^./libguile/.libs/libguile-3.0.dll.a$' \

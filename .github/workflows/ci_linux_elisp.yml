@@ -89,7 +89,7 @@ jobs:
     - name: Package
       run: |
         cd g
-        ../r/build/ci/tools/package_elisp.sh
+        ../r/build/ci/tools/package_elisp_linux.sh
     - uses: actions/upload-artifact@v3
       with:
         name:   linux-x86_64-guile3-elisp
@@ -109,7 +109,7 @@ jobs:
     needs:
       - build_x64
     if: github.ref == 'refs/heads/repoinfo'
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
         with:
