@@ -1,7 +1,7 @@
 Branch information
 ==================
 
-* repoinfo
+* main
 
   You're looking at it!
 

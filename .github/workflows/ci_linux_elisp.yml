@@ -18,10 +18,10 @@ jobs:
       uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
-    - name: Clone repo repoinfo
+    - name: Clone repo main
       uses: actions/checkout@v4
       with:
-        ref: repoinfo
+        ref: main
         path: r
     - name: Clone repo elisp
       uses: actions/checkout@v4
@@ -108,7 +108,7 @@ jobs:
       contents: write
     needs:
       - build_x64
-    if: github.ref == 'refs/heads/repoinfo'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
