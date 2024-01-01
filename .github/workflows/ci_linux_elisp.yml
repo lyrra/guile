@@ -86,6 +86,11 @@ jobs:
       run: |
         cd g
         ../r/build/ci/tools/build_guile.sh
+    - name: make-install
+      shell: bash
+      run: |
+        cd g
+        ../r/build/ci/linux/make.sh
     - name: Package
       run: |
         cd g
