@@ -37,10 +37,10 @@ jobs:
           mingw-w64-x86_64-lz4
           mingw-w64-x86_64-pcre2
           mingw-w64-x86_64-readline
-    - name: Clone repo repoinfo
+    - name: Clone repo main
       uses: actions/checkout@v3
       with:
-        ref: repoinfo
+        ref: main
         path: r
     - name: Clone repo wip-mingw
       uses: actions/checkout@v3
@@ -129,7 +129,7 @@ jobs:
       contents: write
     needs:
       - build_x64
-    if: github.ref == 'refs/heads/repoinfo'
+    if: github.ref == 'refs/heads/main'
     runs-on: windows-latest
     steps:
       - uses: actions/download-artifact@v2
