@@ -3,4 +3,5 @@
 set -e
 
 make
-make install
+# FIX: no permission to install in /usr/local
+#make install
