@@ -78,6 +78,8 @@ every line in a file.
    available or the port isn't a tty).
 ** Fix build error when cross-compiling to MinGW
    (<https://bugs.gnu.org/75642>)
+** Change <libguile/scm.h> to allow compilation with -Werror=undef
+   (<https://bugs.gnu.org/75085>)
 
 
 Changes in 3.0.10 (since 3.0.9)
