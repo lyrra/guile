@@ -1,3 +1,4 @@
+.dirstamp
 *.o
 *.info
 *.info-[0-9]*
@@ -124,7 +125,6 @@ INSTALL
 /lib/sys/uio.h
 /lib/time.h
 /lib/unistd.h
-/lib/unistr/.dirstamp
 /lib/unistr.h
 /lib/unitypes.h
 /lib/unused-parameter.h
