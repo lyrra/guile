@@ -76,6 +76,8 @@ every line in a file.
    previously Guile would pass through the related exception.  Now it
    prints the file descriptor instead (as it does when `ttyname` isn't
    available or the port isn't a tty).
+** Fix build error when cross-compiling to MinGW
+   (<https://bugs.gnu.org/75642>)
 
 
 Changes in 3.0.10 (since 3.0.9)
