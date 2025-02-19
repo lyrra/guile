@@ -86,6 +86,8 @@ every line in a file.
    in turn, would trigger warnings from 'primitive-fork' and 'environ'
    suggesting they are being called in a multi-threaded context, when in
    fact user code did not create any thread.
+** Calling 'environ' without arguments in a multi-threaded program is OK
+   This used to trigger a warning, unduly.
 
 
 Changes in 3.0.10 (since 3.0.9)
