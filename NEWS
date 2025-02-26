@@ -1,5 +1,5 @@
 Guile NEWS --- history of user-visible changes.
-Copyright (C) 1996-2024 Free Software Foundation, Inc.
+Copyright (C) 1996-2025 Free Software Foundation, Inc.
 See the end for copying conditions.
 
 Please send Guile bug reports to bug-guile@gnu.org.
@@ -80,6 +80,12 @@ every line in a file.
    (<https://bugs.gnu.org/75642>)
 ** Change <libguile/scm.h> to allow compilation with -Werror=undef
    (<https://bugs.gnu.org/75085>)
+** 'all-threads' no longer includes the finalizer thread
+   (<https://bugs.gnu.org/76343>)
+   Previously 'all-threads' would include the finalizer thread.  This,
+   in turn, would trigger warnings from 'primitive-fork' and 'environ'
+   suggesting they are being called in a multi-threaded context, when in
+   fact user code did not create any thread.
 
 
 Changes in 3.0.10 (since 3.0.9)
