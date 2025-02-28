@@ -88,6 +88,8 @@ every line in a file.
    fact user code did not create any thread.
 ** Calling 'environ' without arguments in a multi-threaded program is OK
    This used to trigger a warning, unduly.
+** SRFI-19: 'date->string' converter ~V is now correctly interpreted
+   (<https://bugs.gnu.org/74841>)
 
 
 Changes in 3.0.10 (since 3.0.9)
