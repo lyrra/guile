@@ -93,6 +93,9 @@ every line in a file.
 ** When -flto is enabled configure now adds -ffat-lto-objects if it exists
    Otherwise libguile.a can end up with no code.
    https://lintian.debian.org/tags/no-code-sections.html
+** r6rs-ports.test custom ports tests should no longer fail on stray closes
+   Previously the custom ports weren't explicitly closed, causing
+   GC-related closes to produce spurious "log" events in other tests.
 
 
 Changes in 3.0.10 (since 3.0.9)
