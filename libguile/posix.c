@@ -1176,7 +1176,7 @@ SCM_DEFINE (scm_execl, "execl", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
-  execv (exec_file, exec_argv);
+  execv ((const char*) exec_file,(const char**)  exec_argv);
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1205,7 +1205,7 @@ SCM_DEFINE (scm_execlp, "execlp", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
-  execvp (exec_file, exec_argv);
+  execvp ((const char *) exec_file, (const char **) exec_argv);
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1227,19 +1227,15 @@ SCM_DEFINE (scm_execle, "execle", 2, 0, 1,
 	    "call, but we call it @code{execle} because of its Scheme calling interface.")
 #define FUNC_NAME s_scm_execle
 {
-  char **exec_argv;
-  char **exec_env;
-  char *exec_file;
-
   scm_dynwind_begin (0);
 
-  exec_file = scm_to_locale_string (filename);
+  char *exec_file = scm_to_locale_string (filename);
   scm_dynwind_free (exec_file);
 
-  exec_argv = scm_i_allocate_string_pointers (args);
-  exec_env = scm_i_allocate_string_pointers (env);
+  const char **exec_argv = (const char **) scm_i_allocate_string_pointers (args);
+  const char **exec_env = (const char **) scm_i_allocate_string_pointers (env);
 
-  execve (exec_file, exec_argv, exec_env);
+  execve ((const char *) exec_file, exec_argv, exec_env);
   SCM_SYSERROR;
 
   /* not reached.  */
