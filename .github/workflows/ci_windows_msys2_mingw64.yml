@@ -31,6 +31,7 @@ jobs:
           mingw-w64-x86_64-gettext
           mingw-w64-x86_64-gnutls
           mingw-w64-x86_64-gc
+          mingw-w64-x86_64-gperf
           mingw-w64-x86_64-libffi
           mingw-w64-x86_64-libgcrypt
           mingw-w64-x86_64-libtasn1
