@@ -107,11 +107,11 @@ jobs:
       run: |
         cd m
         ../r/build/ci/tools/package_mingw.sh
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name:   mingw-w64-x86_64-guile3-3.0.5-1-any
         path: m/mingw-w64-x86_64-guile3-3.0.5-1-any.pkg.tar.zst
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: mingw-w64-guile3
         path: m/guile3-mingw64.zip

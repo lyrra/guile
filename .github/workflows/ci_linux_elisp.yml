@@ -95,7 +95,7 @@ jobs:
       run: |
         cd g
         ../r/build/ci/tools/package_elisp_linux.sh
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name:   linux-x86_64-guile3-elisp
         path: g/linux-x86_64-guile3-elisp.tar.xz
