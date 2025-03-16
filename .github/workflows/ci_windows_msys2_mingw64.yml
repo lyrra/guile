@@ -133,7 +133,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: windows-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: mingw-w64-x86_64-guile3-3.0.5-1-any
       - name: Upload Release nightly
