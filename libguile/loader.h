@@ -20,6 +20,10 @@
 #ifndef _SCM_LOADER_H_
 #define _SCM_LOADER_H_
 
+#ifdef __MINGW32__
+#define getpagesize() 0x1000
+#endif
+
 #include <libguile/scm.h>
 
 #ifdef BUILDING_LIBGUILE
