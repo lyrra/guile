@@ -20,6 +20,10 @@
 #if HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#ifdef _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#endif
 
 #include <alignof.h>
 #include <alloca.h>
@@ -596,7 +600,13 @@ scm_i_vm_prepare_stack (struct scm_vm *vp)
      Guile.  */
   if (page_size == 0)
     {
-      page_size = getpagesize ();
+#ifdef _WIN32
+      SYSTEM_INFO si;
+      GetSystemInfo(&si);
+      page_size = si.dwPageSize;
+#else
+      page_size = getpagesize();
+#endif
       /* page_size should be a power of two.  */
       if (page_size & (page_size - 1))
         abort ();

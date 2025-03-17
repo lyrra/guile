@@ -65,7 +65,7 @@
 extern "C" {
 #endif
 
-#if !@HAVE_STRUCT_TIMEVAL@ || @REPLACE_STRUCT_TIMEVAL@
+#if !@HAVE_STRUCT_TIMEVAL@ || (@REPLACE_STRUCT_TIMEVAL@ && !defined _WIN32)
 
 # if @REPLACE_STRUCT_TIMEVAL@
 #  define timeval rpl_timeval

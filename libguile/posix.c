@@ -1176,7 +1176,11 @@ SCM_DEFINE (scm_execl, "execl", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
+#ifdef __MINGW32__
+  execv (exec_file, (const char *const *)exec_argv);
+#else
   execv (exec_file, exec_argv);
+#endif
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1204,8 +1208,12 @@ SCM_DEFINE (scm_execlp, "execlp", 1, 0, 1,
   scm_dynwind_free (exec_file);
 
   exec_argv = scm_i_allocate_string_pointers (args);
+#ifdef __MINGW32__
+  execv (exec_file, (const char *const *)exec_argv);
+#else
+  execv (exec_file, exec_argv);
+#endif
 
-  execvp (exec_file, exec_argv);
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1223,10 +1231,19 @@ SCM_DEFINE (scm_execle, "execle", 2, 0, 1,
 	    "Similar to @code{execl}, but the environment of the new process is\n"
 	    "specified by @var{env}, which must be a list of strings as returned by the\n"
 	    "@code{environ} procedure.\n\n"
-	    "This procedure is currently implemented using the @code{execve} system\n"
-	    "call, but we call it @code{execle} because of its Scheme calling interface.")
+#ifdef __MINGW32__
+            "This function is not fully supported on Windows.\n"
+            "It currently raises an error indicating unimplemented functionality.")
+#else
+            "This procedure is currently implemented using the @code{execve} system\n"
+            "call, but we call it @code{execle} because of its Scheme calling interface.")
+#endif
 #define FUNC_NAME s_scm_execle
 {
+#ifdef __MINGW32__
+  SCM_MISC_ERROR ("execle is not implemented on Windows", SCM_EOL);
+  return SCM_BOOL_F;
+#else
   char **exec_argv;
   char **exec_env;
   char *exec_file;
@@ -1245,6 +1262,7 @@ SCM_DEFINE (scm_execle, "execle", 2, 0, 1,
   /* not reached.  */
   scm_dynwind_end ();
   return SCM_BOOL_F;
+#endif
 }
 #undef FUNC_NAME
 

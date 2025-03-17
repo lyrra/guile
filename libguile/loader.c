@@ -51,6 +51,9 @@
 #include "version.h"
 
 #include "loader.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 
 /* This file contains the loader for Guile's on-disk format: ELF with
@@ -818,19 +821,28 @@ scm_find_slot_map_unlocked (const uint32_t *ip)
   return NULL;
 }
 
-
 void
 scm_bootstrap_loader (void)
 {
-  page_size = getpagesize ();
-  /* page_size should be a power of two.  */
-  if (page_size & (page_size - 1))
-    abort ();
+  int page_size;
+#ifdef _WIN32
+  SYSTEM_INFO si;
+  GetSystemInfo(&si);
+  page_size = si.dwPageSize;
+#else
+  page_size = sysconf(_SC_PAGESIZE);  // Fallback for non-Windows
+  if (page_size == -1)
+    abort();
+#endif
+  if (page_size & (page_size - 1))  // Ensure power of two
+    abort();
 
   scm_c_register_extension ("libguile-" SCM_EFFECTIVE_VERSION,
                             "scm_init_loader",
                             (scm_t_extension_init_func)scm_init_loader, NULL);
 }
+
+
 
 void
 scm_init_loader (void)
