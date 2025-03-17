@@ -43,6 +43,7 @@
 #include "smob.h"
 #include "strings.h"
 #include "symbols.h"
+#include "async.h"
 #include "syscalls.h"
 #include "threads.h"
 #include "values.h"
