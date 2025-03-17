@@ -122,6 +122,16 @@
   M(g,   G,   0xf)     \
   M(nle, NLE, 0xf)     \
   /* EOL */
+#ifndef ffs
+#include <intrin.h> // For Windows intrinsics
+static inline int ffs(int i) {
+    unsigned long index;
+    if (_BitScanForward(&index, (unsigned long)i)) {
+        return (int)index + 1; // _BitScanForward returns 0-based index, ffs is 1-based
+    }
+    return 0; // Return 0 if no bits are set, per ffs behavior
+}
+#endif
 
 enum x86_cc
 {
