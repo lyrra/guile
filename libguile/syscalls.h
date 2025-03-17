@@ -1,6 +1,5 @@
 #ifndef SCM_SYSCALLS_H
 #define SCM_SYSCALLS_H
-
 /* Copyright 1995-1996,2000-2002,2006,2008-2011,2013-2014,2018
      Free Software Foundation, Inc.
 
@@ -20,7 +19,6 @@
    License along with Guile.  If not, see
    <https://www.gnu.org/licenses/>.  */
 
-
 
 /* ASYNC_TICK after finding EINTR in order to handle pending signals, if
    any. See comment in scm_syserror. */
@@ -58,7 +56,6 @@
       scm_async_tick ();                                             \
     }
 
-
 
 #if defined GUILE_USE_64_CALLS && GUILE_USE_64_CALLS && defined(HAVE_STAT64)
 #define CHOOSE_LARGEFILE(foo,foo64)     foo64

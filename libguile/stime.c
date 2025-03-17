@@ -44,6 +44,10 @@
 #  include <config.h>
 #endif
 
+#ifdef _WIN32
+#include <sys/time.h>  
+#endif
+
 #include <errno.h>
 #include <stdio.h>
 #include <strftime.h>

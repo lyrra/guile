@@ -51,6 +51,9 @@
 #include "version.h"
 
 #include "loader.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #ifdef __MINGW32__
 #include "posix-w32.h"
@@ -821,7 +824,6 @@ scm_find_slot_map_unlocked (const uint32_t *ip)
   return NULL;
 }
 
-
 void
 scm_bootstrap_loader (void)
 {
@@ -838,6 +840,8 @@ scm_bootstrap_loader (void)
                             "scm_init_loader",
                             (scm_t_extension_init_func)scm_init_loader, NULL);
 }
+
+
 
 void
 scm_init_loader (void)

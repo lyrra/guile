@@ -20,6 +20,10 @@
 #if HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#ifdef _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#endif
 
 #include <alignof.h>
 #include <alloca.h>
