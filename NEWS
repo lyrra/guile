@@ -47,6 +47,11 @@ every line in a file.
 
 * Changes to the distribution
 
+* Build system changes
+
+** -Werror=array-bounds is now added to CFLAGS when available
+   This catches <https://bugs.gnu.org/76907>
+
 * Bug fixes
 
 ** `basename` now checks the suffix against the base name, not the full path
