@@ -62,13 +62,14 @@
          (copy-file src dest)
          (pass-if-equal "copy-file dest content" msg
            (call-with-input-file dest get-string-all)))
-       (with-test-prefix "read only dest"
-         (chmod dest #o444)
-         (with-exception-handler
-             (λ (ex)
-               (pass-if-equal "errno is EACCES" EACCES (exception-errno ex)))
-           (λ () (copy-file src dest))
-           #:unwind? #t)))))
+       (unless (zero? (geteuid))
+         (with-test-prefix "read only dest"
+           (chmod dest #o444)
+           (with-exception-handler
+               (λ (ex)
+                 (pass-if-equal "errno is EACCES" EACCES (exception-errno ex)))
+             (λ () (copy-file src dest))
+             #:unwind? #t))))))
 
   ;; return next prospective file descriptor number
   (define (next-fd)
