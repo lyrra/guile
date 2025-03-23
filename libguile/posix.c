@@ -1,4 +1,4 @@
-/* Copyright 1995-2014, 2016-2019, 2021-2024
+/* Copyright 1995-2014, 2016-2019, 2021-2025
      Free Software Foundation, Inc.
    Copyright 2021 Maxime Devos <maximedevos@telenet.be>
 
@@ -1174,7 +1174,11 @@ SCM_DEFINE (scm_execl, "execl", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
+#ifdef __MINGW32__
+  execv (exec_file, (const char * const *)exec_argv);
+#else
   execv (exec_file, exec_argv);
+#endif
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1203,7 +1207,11 @@ SCM_DEFINE (scm_execlp, "execlp", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
+#ifdef __MINGW32__
+  execvp (exec_file, (const char * const *)exec_argv);
+#else
   execvp (exec_file, exec_argv);
+#endif
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1237,7 +1245,11 @@ SCM_DEFINE (scm_execle, "execle", 2, 0, 1,
   exec_argv = scm_i_allocate_string_pointers (args);
   exec_env = scm_i_allocate_string_pointers (env);
 
+#ifdef __MINGW32__
+  execve (exec_file, (const char * const *) exec_argv, (const char * const *) exec_env);
+#else
   execve (exec_file, exec_argv, exec_env);
+#endif
   SCM_SYSERROR;
 
   /* not reached.  */
