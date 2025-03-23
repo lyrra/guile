@@ -1779,7 +1779,7 @@ math.h: math.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) $(
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
 	      > $@-t5
-	$(AM_V_at)cat $@-t $@-t5 > $@
+	$(AM_V_at)cat $@-t5 > $@
 MOSTLYCLEANFILES += math.h math.h-t
 
 EXTRA_DIST += math.in.h
