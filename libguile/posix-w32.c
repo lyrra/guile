@@ -344,3 +344,41 @@ getpagesize_w32 (void)
 {
   return 4 * 1024;
 }
+
+/* Use upcase drive letter in NAME.  */
+static char *
+canonicalize_device_name (char *name)
+{
+  if (name == NULL)
+    return name;
+
+  if (HAS_DEVICE (name))
+    name[0] = toupper (name[0]);
+
+  return name;
+}
+
+/* Replace any use of '\\' by '/' in NAME.  */
+static char *
+slashify_file_name (char *name)
+{
+  if (name == NULL)
+    return name;
+
+  for (char *p = name; *p; p++)
+    if (ISSLASH (*p))
+      *p = '/';
+  return name;
+}
+
+#undef canonicalize_file_name
+
+/* Also canonicalize use of drive letter and '/' for NAME.  */
+char *
+canonicalize_file_name_mingw (const char *name)
+{
+  char *canon = canonicalize_file_name (name);
+  canonicalize_device_name (canon);
+  slashify_file_name (canon);
+  return canon;
+}
