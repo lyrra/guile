@@ -1536,7 +1536,7 @@ math.h: math.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) $(
 	      -e 's/@''GNULIB_HYPOT''@/$(GL_GNULIB_HYPOT)/g' \
 	      -e 's/@''GNULIB_HYPOTF''@/$(GL_GNULIB_HYPOTF)/g' \
 	      -e 's/@''GNULIB_HYPOTL''@/$(GL_GNULIB_HYPOTL)/g' \
-	      > $@-t2
+	      math.in.h > $@-t2
 	  cat $@-t2 | \
 	  sed -e 's/@''GNULIB_ILOGB''@/$(GL_GNULIB_ILOGB)/g' \
 	      -e 's/@''GNULIB_ILOGBF''@/$(GL_GNULIB_ILOGBF)/g' \
@@ -1779,7 +1779,9 @@ math.h: math.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) $(
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
 	      > $@-t5
-	$(AM_V_at)cat $@-t5 > $@
+	echo "--------------------------- lhz ----------------------------"
+	ls -ltr
+	$(AM_V_at)mv $@-t5 $@
 MOSTLYCLEANFILES += math.h math.h-t
 
 EXTRA_DIST += math.in.h
