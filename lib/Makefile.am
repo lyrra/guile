@@ -1536,7 +1536,7 @@ math.h: math.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) $(
 	      -e 's/@''GNULIB_HYPOT''@/$(GL_GNULIB_HYPOT)/g' \
 	      -e 's/@''GNULIB_HYPOTF''@/$(GL_GNULIB_HYPOTF)/g' \
 	      -e 's/@''GNULIB_HYPOTL''@/$(GL_GNULIB_HYPOTL)/g' \
-	      math.in.h > $@-t2
+	      $(srcdir)/math.in.h > $@-t2
 	  cat $@-t2 | \
 	  sed -e 's/@''GNULIB_ILOGB''@/$(GL_GNULIB_ILOGB)/g' \
 	      -e 's/@''GNULIB_ILOGBF''@/$(GL_GNULIB_ILOGBF)/g' \
