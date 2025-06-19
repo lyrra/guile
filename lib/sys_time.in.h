@@ -67,9 +67,9 @@ extern "C" {
 
 #if !@HAVE_STRUCT_TIMEVAL@ || @REPLACE_STRUCT_TIMEVAL@
 
-# if @REPLACE_STRUCT_TIMEVAL@
-#  define timeval rpl_timeval
-# endif
+//# if @REPLACE_STRUCT_TIMEVAL@
+//#  define timeval rpl_timeval
+//# endif
 
 # if !GNULIB_defined_struct_timeval
 struct timeval

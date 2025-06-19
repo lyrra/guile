@@ -1146,7 +1146,7 @@ SCM_DEFINE (scm_execl, "execl", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
-  execv (exec_file, exec_argv);
+  execvp (exec_file, (const char * const*) exec_argv);
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1175,7 +1175,7 @@ SCM_DEFINE (scm_execlp, "execlp", 1, 0, 1,
 
   exec_argv = scm_i_allocate_string_pointers (args);
 
-  execvp (exec_file, exec_argv);
+  execvp (exec_file, (const char * const*)exec_argv);
   SCM_SYSERROR;
 
   /* not reached.  */
@@ -1209,7 +1209,7 @@ SCM_DEFINE (scm_execle, "execle", 2, 0, 1,
   exec_argv = scm_i_allocate_string_pointers (args);
   exec_env = scm_i_allocate_string_pointers (env);
 
-  execve (exec_file, exec_argv, exec_env);
+  execve (exec_file, (const char * const*)exec_argv, (const char * const*)exec_env);
   SCM_SYSERROR;
 
   /* not reached.  */

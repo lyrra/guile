@@ -77,6 +77,8 @@ typedef DWORD_PTR cpu_set_t;
 #define PRIO_PGRP    2
 #define PRIO_USER    3
 
+SCM_INTERNAL int getpagesize_win (void);
+
 SCM_INTERNAL int uname (struct utsname * uts);
 SCM_INTERNAL int waitpid (intptr_t, int *, int);
 SCM_INTERNAL int w32_status_to_termsig (DWORD status);

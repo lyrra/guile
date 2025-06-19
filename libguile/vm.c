@@ -74,6 +74,10 @@
 
 #include "vm.h"
 
+#ifdef _WIN64
+#include "posix-w32.h"
+#endif
+
 #include <gc/gc_mark.h>
 
 #if (defined __GNUC__)
@@ -596,7 +600,11 @@ scm_i_vm_prepare_stack (struct scm_vm *vp)
      Guile.  */
   if (page_size == 0)
     {
+#ifndef _WIN64
       page_size = getpagesize ();
+#else
+      page_size = getpagesize_win ();
+#endif
       /* page_size should be a power of two.  */
       if (page_size & (page_size - 1))
         abort ();

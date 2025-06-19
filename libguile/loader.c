@@ -52,6 +52,13 @@
 
 #include "loader.h"
 
+//#ifdef _WIN32
+//#include <windows.h>
+//#endif
+ 
+#ifdef _WIN64
+#include "posix-w32.h"
+#endif
 
 /* This file contains the loader for Guile's on-disk format: ELF with
    some custom tags in the dynamic segment.  */
@@ -822,7 +829,12 @@ scm_find_slot_map_unlocked (const uint32_t *ip)
 void
 scm_bootstrap_loader (void)
 {
+#ifndef _WIN64
   page_size = getpagesize ();
+#else
+  page_size = getpagesize_win ();
+#endif
+
   /* page_size should be a power of two.  */
   if (page_size & (page_size - 1))
     abort ();

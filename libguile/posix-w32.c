@@ -38,6 +38,12 @@
 
 #include "posix-w32.h"
 
+int
+getpagesize_win (void)
+{
+  return 4 * 1024;
+}
+
 /*
  * Get name and information about current kernel.
  */

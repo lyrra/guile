@@ -27,10 +27,12 @@
 /* See stime.c for comments on why _POSIX_C_SOURCE is not always defined. */
 #define _LARGEFILE64_SOURCE      /* ask for stat64 etc */
 
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
 
+#define _LARGEFILE64_SOURCE
 #include <alloca.h>
 #include <dirent.h>
 #include <dirname.h>
